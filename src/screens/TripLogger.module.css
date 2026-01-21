@@ -1,0 +1,169 @@
+.container {
+  padding: var(--space-lg);
+  padding-top: max(var(--space-lg), env(safe-area-inset-top));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header { text-align: center; margin-bottom: var(--space-xl); }
+.header h1 { margin-bottom: var(--space-xs); }
+.header p { color: var(--text-muted); font-size: 0.875rem; }
+
+.modeToggle {
+  display: flex;
+  gap: var(--space-sm);
+  background: var(--bg-card);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.modeButton {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.modeButton.active { background: var(--bg-elevated); color: var(--text-primary); }
+.modeButton:disabled { opacity: 0.5; }
+
+.directionSelector { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); }
+
+.directionButton {
+  flex: 1;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.directionButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0, 255, 200, 0.05); }
+.directionButton:disabled { opacity: 0.5; }
+
+.stopwatchMode { flex: 1; display: flex; flex-direction: column; }
+
+.startButton {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-cyan), #00b894);
+  color: var(--bg-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 255, 200, 0.3);
+}
+
+.segmentsList { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+
+.completedSegment {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.segmentIcon { font-size: 1.25rem; }
+.segmentLabel { flex: 1; font-size: 0.875rem; color: var(--text-secondary); }
+.segmentTime { font-family: var(--font-mono); font-size: 0.875rem; color: var(--accent-cyan); font-weight: 500; }
+
+.currentSegment {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  background: var(--bg-card);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-lg);
+}
+
+.segmentHeader { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+.currentIcon { font-size: 2rem; }
+.currentLabel { font-size: 1.125rem; font-weight: 500; }
+.stopwatchDisplay { margin-bottom: var(--space-xl); }
+.time { font-family: var(--font-mono); font-size: 4rem; font-weight: 600; }
+.time.running { color: var(--accent-cyan); text-shadow: 0 0 40px rgba(0, 255, 200, 0.5); }
+
+.nextButton {
+  padding: var(--space-md) var(--space-2xl);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+.tripComplete { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.tripComplete h2 { margin-bottom: var(--space-lg); color: var(--accent-cyan); }
+.totalTime { display: flex; flex-direction: column; gap: var(--space-xs); margin-bottom: var(--space-xl); }
+.totalLabel { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+.totalValue { font-family: var(--font-mono); font-size: 3rem; font-weight: 600; }
+
+.actionButtons { display: flex; flex-direction: column; gap: var(--space-sm); width: 100%; max-width: 280px; }
+
+.primaryButton {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.primaryButton:disabled { opacity: 0.5; }
+
+.secondaryButton {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+}
+
+.manualMode { flex: 1; display: flex; flex-direction: column; }
+.manualSegments { display: flex; flex-direction: column; gap: var(--space-md); margin-bottom: var(--space-lg); }
+
+.manualSegment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.manualSegmentLabel { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.875rem; color: var(--text-secondary); }
+.manualInput { display: flex; align-items: center; gap: var(--space-xs); }
+.manualInput input { width: 60px; padding: var(--space-sm); background: var(--bg-elevated); border-radius: var(--radius-sm); text-align: right; font-family: var(--font-mono); }
+.inputSuffix { font-size: 0.75rem; color: var(--text-muted); }
+
+.manualTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.manualTotal span:first-child { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; }
+.manualTotalValue { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--accent-cyan); }
+
+.successCard { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: var(--space-xl); }
+.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 200, 0.1); border: 2px solid var(--accent-cyan); border-radius: 50%; font-size: 2rem; color: var(--accent-cyan); margin-bottom: var(--space-lg); }
+.successCard h2 { margin-bottom: var(--space-sm); }
+.successCard p { margin-bottom: var(--space-xl); }

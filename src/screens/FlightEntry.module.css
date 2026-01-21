@@ -1,0 +1,102 @@
+.container {
+  padding: var(--space-lg);
+  padding-top: max(var(--space-lg), env(safe-area-inset-top));
+  min-height: 100vh;
+}
+
+.header { text-align: center; margin-bottom: var(--space-xl); }
+.header h1 { margin-bottom: var(--space-xs); }
+.header p { color: var(--text-muted); font-size: 0.875rem; }
+
+.form { display: flex; flex-direction: column; gap: var(--space-lg); }
+
+.routeSelector { display: flex; gap: var(--space-sm); }
+
+.routeButton {
+  flex: 1;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.routeButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0, 255, 200, 0.05); }
+
+.field { display: flex; flex-direction: column; gap: var(--space-sm); }
+.label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+
+.airlineGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
+
+.airlineButton {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.airlineButton.active { border-color: var(--accent-amber); color: var(--accent-amber); background: rgba(255, 184, 0, 0.05); }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+
+.input {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.input:focus { border-color: var(--accent-cyan); }
+
+.inputWithPrefix {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.inputWithPrefix:focus-within { border-color: var(--accent-cyan); }
+.prefix { padding: var(--space-md); padding-right: 0; color: var(--text-muted); font-family: var(--font-mono); }
+.inputWithPrefix .input { border: none; background: transparent; }
+
+.paymentToggle {
+  display: flex;
+  gap: var(--space-sm);
+  background: var(--bg-card);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+}
+
+.paymentButton {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.paymentButton.active { background: var(--bg-elevated); color: var(--text-primary); }
+
+.primaryButton {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  margin-top: var(--space-md);
+}
+
+.primaryButton:disabled { opacity: 0.5; }
+
+.successCard { min-height: calc(100vh - 100px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: var(--space-xl); }
+.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(255, 184, 0, 0.1); border: 2px solid var(--accent-amber); border-radius: 50%; font-size: 2rem; margin-bottom: var(--space-lg); }
+.successCard h2 { margin-bottom: var(--space-sm); }
+.successCard p { margin-bottom: var(--space-xl); }

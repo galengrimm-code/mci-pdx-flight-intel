@@ -1,0 +1,85 @@
+.container {
+  padding: var(--space-lg);
+  padding-top: max(var(--space-lg), env(safe-area-inset-top));
+  min-height: 100vh;
+}
+
+.header { text-align: center; margin-bottom: var(--space-xl); }
+.header h1 { margin-bottom: var(--space-xs); }
+.header p { color: var(--text-muted); font-size: 0.875rem; }
+
+.loading { display: flex; align-items: center; justify-content: center; min-height: 200px; color: var(--text-muted); }
+
+.tabs {
+  display: flex;
+  gap: var(--space-sm);
+  background: var(--bg-card);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-xl);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.tab.active { background: var(--bg-elevated); color: var(--text-primary); }
+
+.tabContent { display: flex; flex-direction: column; gap: var(--space-lg); }
+
+.sectionTitle { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: var(--space-md); }
+
+.summaryCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.summaryCard h3 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--space-md); }
+
+.summaryGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); }
+.summaryItem { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.summaryValue { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; }
+.summaryLabel { font-size: 0.625rem; color: var(--text-muted); text-transform: uppercase; }
+
+.segmentList { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+.segmentCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.segmentHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); }
+.segmentType { font-size: 0.875rem; font-weight: 500; text-transform: capitalize; }
+.segmentCount { font-size: 0.75rem; color: var(--text-muted); }
+
+.segmentStats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
+.segmentStat { display: flex; flex-direction: column; align-items: center; }
+.statValue { font-family: var(--font-mono); font-size: 1rem; font-weight: 500; color: var(--accent-cyan); }
+.statLabel { font-size: 0.625rem; color: var(--text-muted); text-transform: uppercase; }
+
+.priceCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.priceCard h3 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--space-md); }
+
+.priceGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
+.priceItem { display: flex; flex-direction: column; gap: 2px; }
+.priceLabel { font-size: 0.75rem; color: var(--text-muted); }
+.priceValue { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; }
+
+.insight { font-size: 0.875rem; color: var(--text-secondary); padding-top: var(--space-md); border-top: 1px solid var(--border-subtle); }
+
+.empty { text-align: center; padding: var(--space-xl); color: var(--text-muted); font-size: 0.875rem; }
