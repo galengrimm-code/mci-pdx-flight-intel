@@ -46,6 +46,8 @@
   text-decoration: none;
   color: var(--text-muted);
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 101;
 }
 
 .navItem.active {

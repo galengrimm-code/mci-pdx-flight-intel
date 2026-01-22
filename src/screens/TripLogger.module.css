@@ -10,6 +10,32 @@
 .header h1 { margin-bottom: var(--space-xs); }
 .header p { color: var(--text-muted); font-size: 0.875rem; }
 
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  color: #ff6b6b;
+  font-size: 0.875rem;
+}
+
+.errorBanner span:first-child { font-size: 1rem; }
+.errorBanner span:nth-child(2) { flex: 1; }
+.errorBanner button {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: var(--space-xs);
+  opacity: 0.7;
+}
+.errorBanner button:hover { opacity: 1; }
+
 .modeToggle {
   display: flex;
   gap: var(--space-sm);
@@ -146,8 +172,9 @@
 }
 
 .manualSegmentLabel { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.875rem; color: var(--text-secondary); }
+.manualInputGroup { display: flex; align-items: center; gap: var(--space-md); }
 .manualInput { display: flex; align-items: center; gap: var(--space-xs); }
-.manualInput input { width: 60px; padding: var(--space-sm); background: var(--bg-elevated); border-radius: var(--radius-sm); text-align: right; font-family: var(--font-mono); }
+.manualInput input { width: 50px; padding: var(--space-sm); background: var(--bg-elevated); border-radius: var(--radius-sm); text-align: right; font-family: var(--font-mono); }
 .inputSuffix { font-size: 0.75rem; color: var(--text-muted); }
 
 .manualTotal {

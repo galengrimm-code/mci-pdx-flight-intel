@@ -12,7 +12,7 @@ const SEGMENTS = [
   { id: 'boarding_buffer', label: 'Boarding Buffer', icon: '⏳' },
 ]
 
-const DIRECTIONS = ['MCI to PDX', 'PDX to MCI']
+const DIRECTIONS = ['MCI', 'PDX']
 
 export default function TripLogger() {
   const [mode, setMode] = useState('stopwatch')
@@ -23,7 +23,8 @@ export default function TripLogger() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const stopwatch = useStopwatch()
-  const [manualTimes, setManualTimes] = useState(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: '' }), {}))
+  const [manualTimes, setManualTimes] = useState(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
+  const [sheetError, setSheetError] = useState(null)
 
   const currentSegment = SEGMENTS[currentSegmentIndex]
   const isLastSegment = currentSegmentIndex === SEGMENTS.length - 1
@@ -48,14 +49,24 @@ export default function TripLogger() {
     }
   }
 
+  const getManualMinutes = (segId) => {
+    const time = manualTimes[segId]
+    return (parseFloat(time.hours) || 0) * 60 + (parseFloat(time.minutes) || 0)
+  }
+
   const handleSaveTrip = async () => {
+    if (!sheetsService.isConfigured()) {
+      setSheetError('Google Sheet not connected. Please configure in Settings.')
+      return
+    }
+    setSheetError(null)
     setSaving(true)
     try {
       const tripId = sheetsService.generateId()
       const today = new Date()
       const dateStr = today.toISOString().split('T')[0]
       const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' })
-      const segments = mode === 'stopwatch' ? completedSegments : SEGMENTS.map(seg => ({ ...seg, durationMinutes: parseFloat(manualTimes[seg.id]) || 0 })).filter(seg => seg.durationMinutes > 0)
+      const segments = mode === 'stopwatch' ? completedSegments : SEGMENTS.map(seg => ({ ...seg, durationMinutes: getManualMinutes(seg.id) })).filter(seg => seg.durationMinutes > 0)
       const totalTime = segments.reduce((sum, seg) => sum + (seg.durationMinutes || 0), 0)
 
       await sheetsService.addTrip({ id: tripId, date: dateStr, direction, flight_time: '', day_of_week: dayOfWeek, notes: '', total_time: totalTime.toFixed(1) })
@@ -65,7 +76,7 @@ export default function TripLogger() {
       setSaved(true)
     } catch (error) {
       console.error('Failed to save trip:', error)
-      alert('Failed to save trip')
+      setSheetError('Failed to save trip. Please check your connection.')
     } finally {
       setSaving(false)
     }
@@ -76,8 +87,9 @@ export default function TripLogger() {
     setCurrentSegmentIndex(0)
     setCompletedSegments([])
     setSaved(false)
+    setSheetError(null)
     stopwatch.reset()
-    setManualTimes(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: '' }), {}))
+    setManualTimes(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
   }
 
   if (saved) {
@@ -95,6 +107,13 @@ export default function TripLogger() {
 
   return (
     <div className={styles.container}>
+      {sheetError && (
+        <div className={styles.errorBanner}>
+          <span>⚠️</span>
+          <span>{sheetError}</span>
+          <button onClick={() => setSheetError(null)}>✕</button>
+        </div>
+      )}
       <header className={styles.header}>
         <h1>Trip Logger</h1>
         <p>Track your door-to-gate time</p>
@@ -167,18 +186,24 @@ export default function TripLogger() {
                   <span>{segment.icon}</span>
                   <span>{segment.label}</span>
                 </div>
-                <div className={styles.manualInput}>
-                  <input type="number" inputMode="decimal" placeholder="0" value={manualTimes[segment.id]} onChange={(e) => setManualTimes(prev => ({ ...prev, [segment.id]: e.target.value }))} />
-                  <span className={styles.inputSuffix}>min</span>
+                <div className={styles.manualInputGroup}>
+                  <div className={styles.manualInput}>
+                    <input type="number" inputMode="numeric" placeholder="0" value={manualTimes[segment.id].hours} onChange={(e) => setManualTimes(prev => ({ ...prev, [segment.id]: { ...prev[segment.id], hours: e.target.value } }))} />
+                    <span className={styles.inputSuffix}>hr</span>
+                  </div>
+                  <div className={styles.manualInput}>
+                    <input type="number" inputMode="numeric" placeholder="0" value={manualTimes[segment.id].minutes} onChange={(e) => setManualTimes(prev => ({ ...prev, [segment.id]: { ...prev[segment.id], minutes: e.target.value } }))} />
+                    <span className={styles.inputSuffix}>min</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
           <div className={styles.manualTotal}>
             <span>Total</span>
-            <span className={styles.manualTotalValue}>{Object.values(manualTimes).reduce((sum, val) => sum + (parseFloat(val) || 0), 0).toFixed(1)} min</span>
+            <span className={styles.manualTotalValue}>{Object.keys(manualTimes).reduce((sum, segId) => sum + getManualMinutes(segId), 0).toFixed(1)} min</span>
           </div>
-          <button onClick={handleSaveTrip} disabled={saving || Object.values(manualTimes).every(v => !v)} className={styles.primaryButton}>{saving ? 'Saving...' : 'Save Trip'}</button>
+          <button onClick={handleSaveTrip} disabled={saving || Object.values(manualTimes).every(v => !v.hours && !v.minutes)} className={styles.primaryButton}>{saving ? 'Saving...' : 'Save Trip'}</button>
         </div>
       )}
     </div>
