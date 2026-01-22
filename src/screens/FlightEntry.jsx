@@ -9,9 +9,10 @@ const ROUTES = ['MCI to PDX', 'PDX to MCI']
 export default function FlightEntry() {
   const [formData, setFormData] = useState({
     airline: '', flightNumber: '', route: ROUTES[0], departureDate: '', departureTime: '',
-    cashPrice: '', milesUsed: '', fees: '', bookingLeadDays: '', notes: ''
+    cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: ''
   })
   const [paymentType, setPaymentType] = useState('cash')
+  const [tripType, setTripType] = useState('one-way')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
@@ -22,11 +23,15 @@ export default function FlightEntry() {
     setSaving(true)
     try {
       const departureDateTime = formData.departureDate && formData.departureTime ? `${formData.departureDate}T${formData.departureTime}` : formData.departureDate
+      const comparisonNote = paymentType === 'cash'
+        ? (formData.milesEquivalent ? `Miles equivalent: ${formData.milesEquivalent}` : '')
+        : (formData.cashEquivalent ? `Cash equivalent: $${formData.cashEquivalent}` : '')
+      const notesWithComparison = [tripType, comparisonNote, formData.notes].filter(Boolean).join(' | ')
       await sheetsService.addFlight({
         airline: formData.airline, flight_number: formData.flightNumber, route: formData.route,
         departure_time: departureDateTime, cash_price: paymentType === 'cash' ? formData.cashPrice : '',
         miles_used: paymentType === 'miles' ? formData.milesUsed : '', fees: formData.fees,
-        booking_lead_days: formData.bookingLeadDays, notes: formData.notes
+        booking_lead_days: formData.bookingLeadDays, notes: notesWithComparison
       })
       setSaved(true)
     } catch (error) {
@@ -38,8 +43,9 @@ export default function FlightEntry() {
   }
 
   const handleReset = () => {
-    setFormData({ airline: '', flightNumber: '', route: ROUTES[0], departureDate: '', departureTime: '', cashPrice: '', milesUsed: '', fees: '', bookingLeadDays: '', notes: '' })
+    setFormData({ airline: '', flightNumber: '', route: ROUTES[0], departureDate: '', departureTime: '', cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '' })
     setPaymentType('cash')
+    setTripType('one-way')
     setSaved(false)
   }
 
@@ -105,28 +111,51 @@ export default function FlightEntry() {
           </div>
         </div>
 
-        {paymentType === 'cash' ? (
-          <div className={styles.field}>
-            <label className={styles.label}>Cash Price</label>
-            <div className={styles.inputWithPrefix}>
-              <span className={styles.prefix}>$</span>
-              <input type="number" inputMode="decimal" placeholder="0.00" value={formData.cashPrice} onChange={(e) => handleChange('cashPrice', e.target.value)} className={styles.input} required />
-            </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Trip Type</label>
+          <div className={styles.tripTypeToggle}>
+            <button type="button" className={`${styles.tripTypeButton} ${tripType === 'one-way' ? styles.active : ''}`} onClick={() => setTripType('one-way')}>One Way</button>
+            <button type="button" className={`${styles.tripTypeButton} ${tripType === 'round-trip' ? styles.active : ''}`} onClick={() => setTripType('round-trip')}>Round Trip</button>
           </div>
-        ) : (
-          <div className={styles.row}>
+        </div>
+
+        {paymentType === 'cash' ? (
+          <>
             <div className={styles.field}>
-              <label className={styles.label}>Miles Used</label>
-              <input type="number" inputMode="numeric" placeholder="0" value={formData.milesUsed} onChange={(e) => handleChange('milesUsed', e.target.value)} className={styles.input} required />
-            </div>
-            <div className={styles.field}>
-              <label className={styles.label}>Fees</label>
+              <label className={styles.label}>Cash Price</label>
               <div className={styles.inputWithPrefix}>
                 <span className={styles.prefix}>$</span>
-                <input type="number" inputMode="decimal" placeholder="5.60" value={formData.fees} onChange={(e) => handleChange('fees', e.target.value)} className={styles.input} />
+                <input type="number" inputMode="decimal" placeholder="0.00" value={formData.cashPrice} onChange={(e) => handleChange('cashPrice', e.target.value)} className={styles.input} required />
               </div>
             </div>
-          </div>
+            <div className={styles.field}>
+              <label className={styles.label}>Miles Equivalent (what it would cost in miles)</label>
+              <input type="number" inputMode="numeric" placeholder="0" value={formData.milesEquivalent} onChange={(e) => handleChange('milesEquivalent', e.target.value)} className={styles.input} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Miles Used</label>
+                <input type="number" inputMode="numeric" placeholder="0" value={formData.milesUsed} onChange={(e) => handleChange('milesUsed', e.target.value)} className={styles.input} required />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Fees</label>
+                <div className={styles.inputWithPrefix}>
+                  <span className={styles.prefix}>$</span>
+                  <input type="number" inputMode="decimal" placeholder="5.60" value={formData.fees} onChange={(e) => handleChange('fees', e.target.value)} className={styles.input} />
+                </div>
+              </div>
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label}>Cash Equivalent (what it would cost in cash)</label>
+              <div className={styles.inputWithPrefix}>
+                <span className={styles.prefix}>$</span>
+                <input type="number" inputMode="decimal" placeholder="0.00" value={formData.cashEquivalent} onChange={(e) => handleChange('cashEquivalent', e.target.value)} className={styles.input} />
+              </div>
+            </div>
+          </>
         )}
 
         <button type="submit" disabled={!isValid || saving} className={styles.primaryButton}>{saving ? 'Saving...' : 'Save Flight'}</button>

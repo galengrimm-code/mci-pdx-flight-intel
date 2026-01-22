@@ -9,7 +9,6 @@ const SEGMENTS = [
   { id: 'terminal_to_parking', label: 'Terminal to Parking', icon: '🅿️' },
   { id: 'parking_to_security', label: 'Parking to Security', icon: '🚶' },
   { id: 'security_to_gate', label: 'Security to Gate', icon: '🔒' },
-  { id: 'boarding_buffer', label: 'Boarding Buffer', icon: '⏳' },
 ]
 
 const DIRECTIONS = ['MCI', 'PDX']
@@ -24,6 +23,7 @@ export default function TripLogger() {
   const [saved, setSaved] = useState(false)
   const stopwatch = useStopwatch()
   const [manualTimes, setManualTimes] = useState(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
+  const [departureTime, setDepartureTime] = useState('')
   const [sheetError, setSheetError] = useState(null)
 
   const currentSegment = SEGMENTS[currentSegmentIndex]
@@ -69,7 +69,7 @@ export default function TripLogger() {
       const segments = mode === 'stopwatch' ? completedSegments : SEGMENTS.map(seg => ({ ...seg, durationMinutes: getManualMinutes(seg.id) })).filter(seg => seg.durationMinutes > 0)
       const totalTime = segments.reduce((sum, seg) => sum + (seg.durationMinutes || 0), 0)
 
-      await sheetsService.addTrip({ id: tripId, date: dateStr, direction, flight_time: '', day_of_week: dayOfWeek, notes: '', total_time: totalTime.toFixed(1) })
+      await sheetsService.addTrip({ id: tripId, date: dateStr, direction, flight_time: departureTime, day_of_week: dayOfWeek, notes: '', total_time: totalTime.toFixed(1) })
       for (const segment of segments) {
         await sheetsService.addTimeSegment({ trip_id: tripId, segment_type: segment.id, start_time: segment.startTime || '', end_time: segment.endTime || '', duration_minutes: segment.durationMinutes.toFixed(1), notes: '' })
       }
@@ -88,6 +88,7 @@ export default function TripLogger() {
     setCompletedSegments([])
     setSaved(false)
     setSheetError(null)
+    setDepartureTime('')
     stopwatch.reset()
     setManualTimes(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
   }
@@ -168,6 +169,10 @@ export default function TripLogger() {
                     <span className={styles.totalLabel}>Total Time</span>
                     <span className={styles.totalValue}>{completedSegments.reduce((sum, seg) => sum + seg.durationMinutes, 0).toFixed(1)} min</span>
                   </div>
+                  <div className={styles.departureTimeField}>
+                    <label className={styles.departureLabel}>✈️ Flight Departure Time</label>
+                    <input type="time" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)} className={styles.departureInput} />
+                  </div>
                   <div className={styles.actionButtons}>
                     <button onClick={handleSaveTrip} disabled={saving} className={styles.primaryButton}>{saving ? 'Saving...' : 'Save Trip'}</button>
                     <button onClick={handleReset} className={styles.secondaryButton}>Discard</button>
@@ -198,6 +203,10 @@ export default function TripLogger() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className={styles.departureTimeField}>
+            <label className={styles.departureLabel}>✈️ Flight Departure Time</label>
+            <input type="time" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)} className={styles.departureInput} />
           </div>
           <div className={styles.manualTotal}>
             <span>Total</span>
