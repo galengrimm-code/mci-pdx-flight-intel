@@ -15,11 +15,11 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-md);
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-lg);
-  color: #ff6b6b;
+  color: var(--accent-red);
   font-size: 0.875rem;
 }
 
@@ -28,7 +28,7 @@
 .errorBanner button {
   background: none;
   border: none;
-  color: #ff6b6b;
+  color: var(--accent-red);
   font-size: 1rem;
   cursor: pointer;
   padding: var(--space-xs);
@@ -70,7 +70,7 @@
   color: var(--text-secondary);
 }
 
-.directionButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0, 255, 200, 0.05); }
+.directionButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(8, 145, 178, 0.08); }
 .directionButton:disabled { opacity: 0.5; }
 
 .stopwatchMode { flex: 1; display: flex; flex-direction: column; }
@@ -80,11 +80,11 @@
   height: 200px;
   margin: auto;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-cyan), #00b894);
-  color: var(--bg-primary);
+  background: linear-gradient(135deg, var(--accent-cyan), #0e7490);
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 600;
-  box-shadow: 0 8px 32px rgba(0, 255, 200, 0.3);
+  box-shadow: 0 8px 32px rgba(8, 145, 178, 0.35);
 }
 
 .segmentsList { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-lg); }
@@ -120,12 +120,12 @@
 .currentLabel { font-size: 1.125rem; font-weight: 500; }
 .stopwatchDisplay { margin-bottom: var(--space-xl); }
 .time { font-family: var(--font-mono); font-size: 4rem; font-weight: 600; }
-.time.running { color: var(--accent-cyan); text-shadow: 0 0 40px rgba(0, 255, 200, 0.5); }
+.time.running { color: var(--accent-cyan); text-shadow: 0 0 40px rgba(8, 145, 178, 0.4); }
 
 .nextButton {
   padding: var(--space-md) var(--space-2xl);
   background: var(--accent-cyan);
-  color: var(--bg-primary);
+  color: #ffffff;
   border-radius: var(--radius-full);
   font-weight: 600;
 }
@@ -174,7 +174,7 @@
   width: 100%;
   padding: var(--space-md) var(--space-lg);
   background: var(--accent-cyan);
-  color: var(--bg-primary);
+  color: #ffffff;
   border-radius: var(--radius-md);
   font-weight: 600;
 }
@@ -223,6 +223,6 @@
 .manualTotalValue { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--accent-cyan); }
 
 .successCard { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: var(--space-xl); }
-.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 200, 0.1); border: 2px solid var(--accent-cyan); border-radius: 50%; font-size: 2rem; color: var(--accent-cyan); margin-bottom: var(--space-lg); }
+.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(8, 145, 178, 0.1); border: 2px solid var(--accent-cyan); border-radius: 50%; font-size: 2rem; color: var(--accent-cyan); margin-bottom: var(--space-lg); }
 .successCard h2 { margin-bottom: var(--space-sm); }
 .successCard p { margin-bottom: var(--space-xl); }

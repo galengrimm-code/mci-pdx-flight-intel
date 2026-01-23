@@ -58,7 +58,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 255, 200, 0.08);
+  background: rgba(8, 145, 178, 0.12);
   border-radius: var(--radius-md);
 }
 

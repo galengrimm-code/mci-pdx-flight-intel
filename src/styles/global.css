@@ -1,17 +1,17 @@
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: #1a1a24;
-  --bg-elevated: #22222e;
-  --accent-cyan: #00ffc8;
-  --accent-amber: #ffb800;
-  --accent-red: #ff4757;
-  --accent-blue: #4a9eff;
-  --text-primary: #ffffff;
-  --text-secondary: #8b8b9e;
-  --text-muted: #5a5a6e;
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(0, 255, 200, 0.3);
+  --bg-primary: #f0f5fa;
+  --bg-secondary: #e4ebf3;
+  --bg-card: #ffffff;
+  --bg-elevated: #f7f9fc;
+  --accent-cyan: #0891b2;
+  --accent-amber: #d97706;
+  --accent-red: #dc2626;
+  --accent-blue: #2563eb;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-active: rgba(8, 145, 178, 0.4);
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
@@ -50,9 +50,9 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-image:
+    linear-gradient(rgba(8, 145, 178, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 145, 178, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
   pointer-events: none;
   z-index: 0;

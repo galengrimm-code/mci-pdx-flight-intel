@@ -38,8 +38,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  background: rgba(74, 158, 255, 0.1);
-  border: 1px solid rgba(74, 158, 255, 0.3);
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.25);
   padding: var(--space-md);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-lg);
@@ -96,14 +96,14 @@
   color: var(--text-primary);
 }
 
-.actionCard.cyan { border-color: rgba(0, 255, 200, 0.2); }
+.actionCard.cyan { border-color: rgba(8, 145, 178, 0.25); }
 .actionCard.cyan .actionIcon { color: var(--accent-cyan); }
-.actionCard.amber { border-color: rgba(255, 184, 0, 0.2); }
+.actionCard.amber { border-color: rgba(217, 119, 6, 0.25); }
 .actionCard.amber .actionIcon { color: var(--accent-amber); }
-.actionCard.blue { border-color: rgba(74, 158, 255, 0.2); }
+.actionCard.blue { border-color: rgba(37, 99, 235, 0.25); }
 .actionCard.blue .actionIcon { color: var(--accent-blue); }
-.actionCard.purple { border-color: rgba(167, 139, 250, 0.2); }
-.actionCard.purple .actionIcon { color: #a78bfa; }
+.actionCard.purple { border-color: rgba(124, 58, 237, 0.25); }
+.actionCard.purple .actionIcon { color: #7c3aed; }
 
 .actionIcon { font-size: 1.5rem; }
 .actionLabel { font-weight: 500; }

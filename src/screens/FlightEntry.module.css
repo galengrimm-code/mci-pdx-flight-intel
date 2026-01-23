@@ -23,7 +23,7 @@
   color: var(--text-secondary);
 }
 
-.routeButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0, 255, 200, 0.05); }
+.routeButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(8, 145, 178, 0.08); }
 
 .field { display: flex; flex-direction: column; gap: var(--space-sm); }
 .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
@@ -39,7 +39,7 @@
   color: var(--text-secondary);
 }
 
-.airlineButton.active { border-color: var(--accent-amber); color: var(--accent-amber); background: rgba(255, 184, 0, 0.05); }
+.airlineButton.active { border-color: var(--accent-amber); color: var(--accent-amber); background: rgba(217, 119, 6, 0.08); }
 
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
 
@@ -88,7 +88,7 @@
   width: 100%;
   padding: var(--space-md) var(--space-lg);
   background: var(--accent-cyan);
-  color: var(--bg-primary);
+  color: #ffffff;
   border-radius: var(--radius-md);
   font-weight: 600;
   margin-top: var(--space-md);
@@ -97,6 +97,6 @@
 .primaryButton:disabled { opacity: 0.5; }
 
 .successCard { min-height: calc(100vh - 100px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: var(--space-xl); }
-.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(255, 184, 0, 0.1); border: 2px solid var(--accent-amber); border-radius: 50%; font-size: 2rem; margin-bottom: var(--space-lg); }
+.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(217, 119, 6, 0.1); border: 2px solid var(--accent-amber); border-radius: 50%; font-size: 2rem; margin-bottom: var(--space-lg); }
 .successCard h2 { margin-bottom: var(--space-sm); }
 .successCard p { margin-bottom: var(--space-xl); }

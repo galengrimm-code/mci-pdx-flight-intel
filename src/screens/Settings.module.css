@@ -42,7 +42,7 @@
   flex: 1;
   padding: var(--space-md);
   background: var(--accent-cyan);
-  color: var(--bg-primary);
+  color: #ffffff;
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.875rem;
@@ -70,8 +70,8 @@
   text-align: center;
 }
 
-.testResult.success { background: rgba(0, 255, 200, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 255, 200, 0.3); }
-.testResult.error { background: rgba(255, 71, 87, 0.1); color: var(--accent-red); border: 1px solid rgba(255, 71, 87, 0.3); }
+.testResult.success { background: rgba(8, 145, 178, 0.1); color: var(--accent-cyan); border: 1px solid rgba(8, 145, 178, 0.25); }
+.testResult.error { background: rgba(220, 38, 38, 0.1); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); }
 
 .instructions {
   list-style: none;
