@@ -83,3 +83,42 @@
 .insight { font-size: 0.875rem; color: var(--text-secondary); padding-top: var(--space-md); border-top: 1px solid var(--border-subtle); }
 
 .empty { text-align: center; padding: var(--space-xl); color: var(--text-muted); font-size: 0.875rem; }
+
+/* Airport Cards Layout */
+.airportCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+@media (max-width: 500px) {
+  .airportCards { grid-template-columns: 1fr; }
+}
+
+/* MCI Theme */
+.mciCard {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-card) 100%);
+}
+
+.mciHeader { color: #f59e0b; }
+
+.mciSegment {
+  border-left: 3px solid #f59e0b;
+}
+
+.mciSegment .statValue { color: #f59e0b; }
+
+/* PDX Theme */
+.pdxCard {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, var(--bg-card) 100%);
+}
+
+.pdxHeader { color: #10b981; }
+
+.pdxSegment {
+  border-left: 3px solid #10b981;
+}
+
+.pdxSegment .statValue { color: #10b981; }

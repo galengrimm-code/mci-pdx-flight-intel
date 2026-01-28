@@ -26,28 +26,46 @@ export default function Analytics() {
     }
   }
 
-  const segmentStats = useMemo(() => {
-    const byType = {}
-    data.segments.forEach(seg => {
-      const type = seg.segment_type
-      if (!byType[type]) byType[type] = []
-      const mins = parseFloat(seg.duration_minutes)
-      if (!isNaN(mins)) byType[type].push(mins)
-    })
-    return Object.entries(byType).map(([type, times]) => {
+  const tripTimeStats = useMemo(() => {
+    const calcStats = (trips) => {
+      const times = trips.map(t => parseFloat(t.total_time)).filter(t => !isNaN(t))
+      if (times.length === 0) return null
       const avg = times.reduce((a, b) => a + b, 0) / times.length
       const sorted = [...times].sort((a, b) => a - b)
-      return { type, avg, min: sorted[0], max: sorted[sorted.length - 1], count: times.length }
-    })
-  }, [data.segments])
-
-  const tripTimeStats = useMemo(() => {
-    const times = data.trips.map(t => parseFloat(t.total_time)).filter(t => !isNaN(t))
-    if (times.length === 0) return null
-    const avg = times.reduce((a, b) => a + b, 0) / times.length
-    const sorted = [...times].sort((a, b) => a - b)
-    return { avg, min: sorted[0], max: sorted[sorted.length - 1], count: times.length }
+      return { avg, min: sorted[0], max: sorted[sorted.length - 1], count: times.length }
+    }
+    const mciTrips = data.trips.filter(t => t.direction === 'MCI')
+    const pdxTrips = data.trips.filter(t => t.direction === 'PDX')
+    return {
+      mci: calcStats(mciTrips),
+      pdx: calcStats(pdxTrips)
+    }
   }, [data.trips])
+
+  const segmentStatsByAirport = useMemo(() => {
+    const calcSegmentStats = (trips) => {
+      const tripIds = new Set(trips.map(t => t.id))
+      const relevantSegments = data.segments.filter(s => tripIds.has(s.trip_id))
+      const byType = {}
+      relevantSegments.forEach(seg => {
+        const type = seg.segment_type
+        if (!byType[type]) byType[type] = []
+        const mins = parseFloat(seg.duration_minutes)
+        if (!isNaN(mins)) byType[type].push(mins)
+      })
+      return Object.entries(byType).map(([type, times]) => {
+        const avg = times.reduce((a, b) => a + b, 0) / times.length
+        const sorted = [...times].sort((a, b) => a - b)
+        return { type, avg, min: sorted[0], max: sorted[sorted.length - 1], count: times.length }
+      })
+    }
+    const mciTrips = data.trips.filter(t => t.direction === 'MCI')
+    const pdxTrips = data.trips.filter(t => t.direction === 'PDX')
+    return {
+      mci: calcSegmentStats(mciTrips),
+      pdx: calcSegmentStats(pdxTrips)
+    }
+  }, [data.trips, data.segments])
 
   const flightStats = useMemo(() => {
     const cashFlights = data.flights.filter(f => f.cash_price)
@@ -82,36 +100,78 @@ export default function Analytics() {
 
       {activeTab === 'time' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.tabContent}>
-          {tripTimeStats && (
-            <div className={styles.summaryCard}>
-              <h3>Total Trip Time</h3>
-              <div className={styles.summaryGrid}>
-                <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.avg.toFixed(0)}</span><span className={styles.summaryLabel}>Avg (min)</span></div>
-                <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.min.toFixed(0)}</span><span className={styles.summaryLabel}>Best</span></div>
-                <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.max.toFixed(0)}</span><span className={styles.summaryLabel}>Worst</span></div>
-                <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.count}</span><span className={styles.summaryLabel}>Trips</span></div>
-              </div>
-            </div>
-          )}
-          <h3 className={styles.sectionTitle}>By Segment</h3>
-          {segmentStats.length === 0 ? (
-            <div className={styles.empty}>No trip data yet. Start logging trips!</div>
-          ) : (
-            <div className={styles.segmentList}>
-              {segmentStats.map(stat => (
-                <div key={stat.type} className={styles.segmentCard}>
-                  <div className={styles.segmentHeader}>
-                    <span className={styles.segmentType}>{stat.type.replace(/_/g, ' ')}</span>
-                    <span className={styles.segmentCount}>{stat.count} samples</span>
-                  </div>
-                  <div className={styles.segmentStats}>
-                    <div className={styles.segmentStat}><span className={styles.statValue}>{stat.avg.toFixed(1)}</span><span className={styles.statLabel}>avg</span></div>
-                    <div className={styles.segmentStat}><span className={styles.statValue}>{stat.min.toFixed(1)}</span><span className={styles.statLabel}>min</span></div>
-                    <div className={styles.segmentStat}><span className={styles.statValue}>{stat.max.toFixed(1)}</span><span className={styles.statLabel}>max</span></div>
-                  </div>
+          <div className={styles.airportCards}>
+            {tripTimeStats.mci && (
+              <div className={`${styles.summaryCard} ${styles.mciCard}`}>
+                <h3 className={styles.mciHeader}>MCI</h3>
+                <div className={styles.summaryGrid}>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.mci.avg.toFixed(0)}</span><span className={styles.summaryLabel}>Avg (min)</span></div>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.mci.min.toFixed(0)}</span><span className={styles.summaryLabel}>Best</span></div>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.mci.max.toFixed(0)}</span><span className={styles.summaryLabel}>Worst</span></div>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.mci.count}</span><span className={styles.summaryLabel}>Trips</span></div>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+            {tripTimeStats.pdx && (
+              <div className={`${styles.summaryCard} ${styles.pdxCard}`}>
+                <h3 className={styles.pdxHeader}>PDX</h3>
+                <div className={styles.summaryGrid}>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.pdx.avg.toFixed(0)}</span><span className={styles.summaryLabel}>Avg (min)</span></div>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.pdx.min.toFixed(0)}</span><span className={styles.summaryLabel}>Best</span></div>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.pdx.max.toFixed(0)}</span><span className={styles.summaryLabel}>Worst</span></div>
+                  <div className={styles.summaryItem}><span className={styles.summaryValue}>{tripTimeStats.pdx.count}</span><span className={styles.summaryLabel}>Trips</span></div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {(!tripTimeStats.mci && !tripTimeStats.pdx) && (
+            <div className={styles.empty}>No trip data yet. Start logging trips!</div>
+          )}
+
+          {(segmentStatsByAirport.mci.length > 0 || segmentStatsByAirport.pdx.length > 0) && (
+            <>
+              {segmentStatsByAirport.mci.length > 0 && (
+                <>
+                  <h3 className={`${styles.sectionTitle} ${styles.mciHeader}`}>MCI Segments</h3>
+                  <div className={styles.segmentList}>
+                    {segmentStatsByAirport.mci.map(stat => (
+                      <div key={stat.type} className={`${styles.segmentCard} ${styles.mciSegment}`}>
+                        <div className={styles.segmentHeader}>
+                          <span className={styles.segmentType}>{stat.type.replace(/_/g, ' ')}</span>
+                          <span className={styles.segmentCount}>{stat.count} samples</span>
+                        </div>
+                        <div className={styles.segmentStats}>
+                          <div className={styles.segmentStat}><span className={styles.statValue}>{stat.avg.toFixed(1)}</span><span className={styles.statLabel}>avg</span></div>
+                          <div className={styles.segmentStat}><span className={styles.statValue}>{stat.min.toFixed(1)}</span><span className={styles.statLabel}>min</span></div>
+                          <div className={styles.segmentStat}><span className={styles.statValue}>{stat.max.toFixed(1)}</span><span className={styles.statLabel}>max</span></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+              {segmentStatsByAirport.pdx.length > 0 && (
+                <>
+                  <h3 className={`${styles.sectionTitle} ${styles.pdxHeader}`}>PDX Segments</h3>
+                  <div className={styles.segmentList}>
+                    {segmentStatsByAirport.pdx.map(stat => (
+                      <div key={stat.type} className={`${styles.segmentCard} ${styles.pdxSegment}`}>
+                        <div className={styles.segmentHeader}>
+                          <span className={styles.segmentType}>{stat.type.replace(/_/g, ' ')}</span>
+                          <span className={styles.segmentCount}>{stat.count} samples</span>
+                        </div>
+                        <div className={styles.segmentStats}>
+                          <div className={styles.segmentStat}><span className={styles.statValue}>{stat.avg.toFixed(1)}</span><span className={styles.statLabel}>avg</span></div>
+                          <div className={styles.segmentStat}><span className={styles.statValue}>{stat.min.toFixed(1)}</span><span className={styles.statLabel}>min</span></div>
+                          <div className={styles.segmentStat}><span className={styles.statValue}>{stat.max.toFixed(1)}</span><span className={styles.statLabel}>max</span></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
           )}
         </motion.div>
       )}
