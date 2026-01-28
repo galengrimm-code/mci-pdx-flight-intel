@@ -5,7 +5,7 @@ import sheetsService from '../services/sheets'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ totalTrips: 0, avgLeadTime: 0, avgMilesValue: 0, lastTrip: null })
+  const [stats, setStats] = useState({ totalTrips: 0, avgLeadTime: 0, avgMilesValue: 0, lastTrip: null, mciAvgTime: 0, pdxAvgTime: 0 })
   const [loading, setLoading] = useState(true)
   const [configured, setConfigured] = useState(false)
 
@@ -26,11 +26,18 @@ export default function Dashboard() {
       const totalTrips = trips.length
       const tripTimes = trips.filter(t => t.total_time).map(t => parseFloat(t.total_time))
       const avgLeadTime = tripTimes.length > 0 ? Math.round(tripTimes.reduce((a, b) => a + b, 0) / tripTimes.length) : 0
+
+      // Calculate MCI and PDX averages separately
+      const mciTrips = trips.filter(t => t.direction === 'MCI' && t.total_time).map(t => parseFloat(t.total_time))
+      const pdxTrips = trips.filter(t => t.direction === 'PDX' && t.total_time).map(t => parseFloat(t.total_time))
+      const mciAvgTime = mciTrips.length > 0 ? Math.round(mciTrips.reduce((a, b) => a + b, 0) / mciTrips.length) : 0
+      const pdxAvgTime = pdxTrips.length > 0 ? Math.round(pdxTrips.reduce((a, b) => a + b, 0) / pdxTrips.length) : 0
+
       const milesFlights = flights.filter(f => f.miles_used && f.cash_price)
       const milesValues = milesFlights.map(f => ((parseFloat(f.cash_price) - parseFloat(f.fees || 0)) / parseFloat(f.miles_used)) * 100)
       const avgMilesValue = milesValues.length > 0 ? (milesValues.reduce((a, b) => a + b, 0) / milesValues.length).toFixed(2) : 0
       const lastTrip = trips.length > 0 ? trips[trips.length - 1] : null
-      setStats({ totalTrips, avgLeadTime, avgMilesValue, lastTrip })
+      setStats({ totalTrips, avgLeadTime, avgMilesValue, lastTrip, mciAvgTime, pdxAvgTime })
     } catch (err) {
       console.error('Failed to load stats:', err)
     } finally {
@@ -74,10 +81,14 @@ export default function Dashboard() {
             <span className={styles.statLabel}>Total Trips</span>
           </div>
           <div className={styles.statCard}>
-            <span className={styles.statValue}>{loading ? '—' : `${stats.avgLeadTime}m`}</span>
-            <span className={styles.statLabel}>Avg Lead Time</span>
+            <span className={`${styles.statValue} ${styles.mci}`}>{loading ? '—' : `${stats.mciAvgTime}m`}</span>
+            <span className={styles.statLabel}>MCI Avg Time</span>
           </div>
-          <div className={`${styles.statCard} ${styles.wide}`}>
+          <div className={styles.statCard}>
+            <span className={`${styles.statValue} ${styles.pdx}`}>{loading ? '—' : `${stats.pdxAvgTime}m`}</span>
+            <span className={styles.statLabel}>PDX Avg Time</span>
+          </div>
+          <div className={styles.statCard}>
             <span className={`${styles.statValue} ${styles.accent}`}>{loading ? '—' : `${stats.avgMilesValue}¢`}</span>
             <span className={styles.statLabel}>Avg Miles Value</span>
           </div>

@@ -71,6 +71,8 @@
 .statCard.wide { grid-column: span 2; }
 .statValue { font-family: var(--font-mono); font-size: 1.75rem; font-weight: 600; }
 .statValue.accent { color: var(--accent-cyan); }
+.statValue.mci { color: #f59e0b; }
+.statValue.pdx { color: #10b981; }
 .statLabel { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
 
 .sectionTitle {
