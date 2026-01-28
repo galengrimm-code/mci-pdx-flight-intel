@@ -8,13 +8,19 @@ const ROUTES = ['MCI to PDX', 'PDX to MCI']
 
 export default function FlightEntry() {
   const [formData, setFormData] = useState({
-    airline: '', flightNumber: '', route: ROUTES[0], departureDate: '', departureTime: '',
-    cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: ''
+    airline: '', route: ROUTES[0], departureDate: '', departureTime: '',
+    cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '', tickets: '1'
   })
   const [paymentType, setPaymentType] = useState('cash')
   const [tripType, setTripType] = useState('one-way')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+
+  // Calculate per-ticket price
+  const ticketCount = parseInt(formData.tickets) || 1
+  const perTicketCash = formData.cashPrice ? (parseFloat(formData.cashPrice) / ticketCount).toFixed(2) : null
+  const perTicketMiles = formData.milesUsed ? Math.round(parseFloat(formData.milesUsed) / ticketCount) : null
+  const perTicketFees = formData.fees ? (parseFloat(formData.fees) / ticketCount).toFixed(2) : null
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }))
 
@@ -26,9 +32,11 @@ export default function FlightEntry() {
       const comparisonNote = paymentType === 'cash'
         ? (formData.milesEquivalent ? `Miles equivalent: ${formData.milesEquivalent}` : '')
         : (formData.cashEquivalent ? `Cash equivalent: $${formData.cashEquivalent}` : '')
-      const notesWithComparison = [tripType, comparisonNote, formData.notes].filter(Boolean).join(' | ')
+      const ticketsNote = ticketCount > 1 ? `${ticketCount} tickets` : ''
+      const perTicketNote = ticketCount > 1 ? (paymentType === 'cash' ? `$${perTicketCash}/ticket` : `${perTicketMiles} miles/ticket`) : ''
+      const notesWithComparison = [tripType, ticketsNote, perTicketNote, comparisonNote, formData.notes].filter(Boolean).join(' | ')
       await sheetsService.addFlight({
-        airline: formData.airline, flight_number: formData.flightNumber, route: formData.route,
+        airline: formData.airline, flight_number: '', route: formData.route,
         departure_time: departureDateTime, cash_price: paymentType === 'cash' ? formData.cashPrice : '',
         miles_used: paymentType === 'miles' ? formData.milesUsed : '', fees: formData.fees,
         booking_lead_days: formData.bookingLeadDays, notes: notesWithComparison
@@ -43,13 +51,13 @@ export default function FlightEntry() {
   }
 
   const handleReset = () => {
-    setFormData({ airline: '', flightNumber: '', route: ROUTES[0], departureDate: '', departureTime: '', cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '' })
+    setFormData({ airline: '', route: ROUTES[0], departureDate: '', departureTime: '', cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '', tickets: '1' })
     setPaymentType('cash')
     setTripType('one-way')
     setSaved(false)
   }
 
-  const isValid = formData.airline && formData.route && formData.departureDate && (paymentType === 'cash' ? formData.cashPrice : formData.milesUsed)
+  const isValid = formData.airline && formData.route && formData.departureDate && formData.tickets && (paymentType === 'cash' ? formData.cashPrice : formData.milesUsed)
 
   if (saved) {
     return (
@@ -73,9 +81,12 @@ export default function FlightEntry() {
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.routeSelector}>
-          {ROUTES.map(route => (
-            <button key={route} type="button" className={`${styles.routeButton} ${formData.route === route ? styles.active : ''}`} onClick={() => handleChange('route', route)}>{route}</button>
-          ))}
+          {ROUTES.map(route => {
+            const isMci = route.startsWith('MCI')
+            return (
+              <button key={route} type="button" className={`${styles.routeButton} ${isMci ? styles.mci : styles.pdx} ${formData.route === route ? styles.active : ''}`} onClick={() => handleChange('route', route)}>{route}</button>
+            )
+          })}
         </div>
 
         <div className={styles.field}>
@@ -87,11 +98,6 @@ export default function FlightEntry() {
           </div>
         </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>Flight Number (optional)</label>
-          <input type="text" placeholder="e.g., AS 123" value={formData.flightNumber} onChange={(e) => handleChange('flightNumber', e.target.value)} className={styles.input} />
-        </div>
-
         <div className={styles.row}>
           <div className={styles.field}>
             <label className={styles.label}>Departure Date</label>
@@ -100,6 +106,15 @@ export default function FlightEntry() {
           <div className={styles.field}>
             <label className={styles.label}>Time</label>
             <input type="time" value={formData.departureTime} onChange={(e) => handleChange('departureTime', e.target.value)} className={styles.input} />
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Number of Tickets</label>
+          <div className={styles.ticketSelector}>
+            {[1, 2, 3, 4].map(num => (
+              <button key={num} type="button" className={`${styles.ticketButton} ${parseInt(formData.tickets) === num ? styles.active : ''}`} onClick={() => handleChange('tickets', num.toString())}>{num}</button>
+            ))}
           </div>
         </div>
 
@@ -122,11 +137,14 @@ export default function FlightEntry() {
         {paymentType === 'cash' ? (
           <>
             <div className={styles.field}>
-              <label className={styles.label}>Cash Price</label>
+              <label className={styles.label}>Total Cash Price</label>
               <div className={styles.inputWithPrefix}>
                 <span className={styles.prefix}>$</span>
                 <input type="number" inputMode="decimal" placeholder="0.00" value={formData.cashPrice} onChange={(e) => handleChange('cashPrice', e.target.value)} className={styles.input} required />
               </div>
+              {ticketCount > 1 && perTicketCash && (
+                <div className={styles.perTicket}>${perTicketCash} per ticket</div>
+              )}
             </div>
             <div className={styles.field}>
               <label className={styles.label}>Miles Equivalent (what it would cost in miles)</label>
@@ -137,15 +155,21 @@ export default function FlightEntry() {
           <>
             <div className={styles.row}>
               <div className={styles.field}>
-                <label className={styles.label}>Miles Used</label>
+                <label className={styles.label}>Total Miles Used</label>
                 <input type="number" inputMode="numeric" placeholder="0" value={formData.milesUsed} onChange={(e) => handleChange('milesUsed', e.target.value)} className={styles.input} required />
+                {ticketCount > 1 && perTicketMiles && (
+                  <div className={styles.perTicket}>{perTicketMiles.toLocaleString()} miles per ticket</div>
+                )}
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>Fees</label>
+                <label className={styles.label}>Total Fees</label>
                 <div className={styles.inputWithPrefix}>
                   <span className={styles.prefix}>$</span>
                   <input type="number" inputMode="decimal" placeholder="5.60" value={formData.fees} onChange={(e) => handleChange('fees', e.target.value)} className={styles.input} />
                 </div>
+                {ticketCount > 1 && perTicketFees && (
+                  <div className={styles.perTicket}>${perTicketFees} per ticket</div>
+                )}
               </div>
             </div>
             <div className={styles.field}>
