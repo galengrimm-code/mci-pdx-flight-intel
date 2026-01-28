@@ -1,20 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import sheetsService from '../services/sheets'
 import styles from './FlightEntry.module.css'
 
 const AIRLINES = ['Alaska', 'Southwest', 'Delta', 'United', 'American', 'Frontier', 'Spirit']
 const ROUTES = ['MCI to PDX', 'PDX to MCI']
+const COMMON_LAYOVERS = ['SEA', 'DEN', 'PHX', 'LAX', 'SFO', 'ORD', 'DFW']
 
 export default function FlightEntry() {
+  const [view, setView] = useState('add') // 'add' or 'history'
   const [formData, setFormData] = useState({
     airline: '', route: ROUTES[0], departureDate: '', departureTime: '',
-    cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '', tickets: '1'
+    cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '', tickets: '1', layover: ''
   })
   const [paymentType, setPaymentType] = useState('cash')
   const [tripType, setTripType] = useState('one-way')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+
+  // History state
+  const [flights, setFlights] = useState([])
+  const [loadingFlights, setLoadingFlights] = useState(false)
+  const [editingFlight, setEditingFlight] = useState(null)
+  const [editForm, setEditForm] = useState({})
+  const [savingEdit, setSavingEdit] = useState(false)
 
   // Calculate per-ticket price
   const ticketCount = parseInt(formData.tickets) || 1
@@ -34,9 +43,10 @@ export default function FlightEntry() {
         : (formData.cashEquivalent ? `Cash equivalent: $${formData.cashEquivalent}` : '')
       const ticketsNote = ticketCount > 1 ? `${ticketCount} tickets` : ''
       const perTicketNote = ticketCount > 1 ? (paymentType === 'cash' ? `$${perTicketCash}/ticket` : `${perTicketMiles} miles/ticket`) : ''
-      const notesWithComparison = [tripType, ticketsNote, perTicketNote, comparisonNote, formData.notes].filter(Boolean).join(' | ')
+      const layoverNote = formData.layover ? `Layover: ${formData.layover}` : ''
+      const notesWithComparison = [tripType, ticketsNote, perTicketNote, layoverNote, comparisonNote, formData.notes].filter(Boolean).join(' | ')
       await sheetsService.addFlight({
-        airline: formData.airline, flight_number: '', route: formData.route,
+        airline: formData.airline, flight_number: formData.layover || '', route: formData.route,
         departure_time: departureDateTime, cash_price: paymentType === 'cash' ? formData.cashPrice : '',
         miles_used: paymentType === 'miles' ? formData.milesUsed : '', fees: formData.fees,
         booking_lead_days: formData.bookingLeadDays, notes: notesWithComparison
@@ -51,13 +61,89 @@ export default function FlightEntry() {
   }
 
   const handleReset = () => {
-    setFormData({ airline: '', route: ROUTES[0], departureDate: '', departureTime: '', cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '', tickets: '1' })
+    setFormData({ airline: '', route: ROUTES[0], departureDate: '', departureTime: '', cashPrice: '', milesUsed: '', fees: '', milesEquivalent: '', cashEquivalent: '', bookingLeadDays: '', notes: '', tickets: '1', layover: '' })
     setPaymentType('cash')
     setTripType('one-way')
     setSaved(false)
   }
 
   const isValid = formData.airline && formData.route && formData.departureDate && formData.tickets && (paymentType === 'cash' ? formData.cashPrice : formData.milesUsed)
+
+  // Load flights when switching to history view
+  useEffect(() => {
+    if (view === 'history') {
+      loadFlights()
+    }
+  }, [view])
+
+  const loadFlights = async () => {
+    if (!sheetsService.isConfigured()) return
+    setLoadingFlights(true)
+    try {
+      const data = await sheetsService.getFlights()
+      data.sort((a, b) => new Date(b.departure_time) - new Date(a.departure_time))
+      setFlights(data)
+    } catch (error) {
+      console.error('Failed to load flights:', error)
+    } finally {
+      setLoadingFlights(false)
+    }
+  }
+
+  const handleEditFlight = (flight) => {
+    setEditingFlight(flight.id)
+    const [date, time] = (flight.departure_time || '').split('T')
+    setEditForm({
+      airline: flight.airline,
+      route: flight.route,
+      departureDate: date || '',
+      departureTime: time || '',
+      cashPrice: flight.cash_price,
+      milesUsed: flight.miles_used,
+      fees: flight.fees,
+      layover: flight.flight_number || '',
+      notes: flight.notes
+    })
+  }
+
+  const handleCancelEdit = () => {
+    setEditingFlight(null)
+    setEditForm({})
+  }
+
+  const handleSaveEdit = async (flightId) => {
+    setSavingEdit(true)
+    try {
+      const departureDateTime = editForm.departureDate && editForm.departureTime ? `${editForm.departureDate}T${editForm.departureTime}` : editForm.departureDate
+      await sheetsService.updateFlight({
+        id: flightId,
+        airline: editForm.airline,
+        flight_number: editForm.layover || '',
+        route: editForm.route,
+        departure_time: departureDateTime,
+        cash_price: editForm.cashPrice,
+        miles_used: editForm.milesUsed,
+        fees: editForm.fees,
+        notes: editForm.notes
+      })
+      setEditingFlight(null)
+      await loadFlights()
+    } catch (error) {
+      console.error('Failed to update flight:', error)
+    } finally {
+      setSavingEdit(false)
+    }
+  }
+
+  const handleDeleteFlight = async (flightId) => {
+    if (!confirm('Delete this flight?')) return
+    try {
+      await sheetsService.deleteFlight(flightId)
+      await loadFlights()
+    } catch (error) {
+      console.error('Failed to delete flight:', error)
+    }
+  }
 
   if (saved) {
     return (
@@ -75,10 +161,75 @@ export default function FlightEntry() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Add Flight</h1>
-        <p>Record a flight booking</p>
+        <h1>Flights</h1>
+        <p>Record and view flight bookings</p>
       </header>
 
+      <div className={styles.viewToggle}>
+        <button className={`${styles.viewButton} ${view === 'add' ? styles.active : ''}`} onClick={() => setView('add')}>➕ Add Flight</button>
+        <button className={`${styles.viewButton} ${view === 'history' ? styles.active : ''}`} onClick={() => setView('history')}>📋 History</button>
+      </div>
+
+      {view === 'history' ? (
+        <div className={styles.historyView}>
+          {loadingFlights ? (
+            <div className={styles.loading}>Loading flights...</div>
+          ) : flights.length === 0 ? (
+            <div className={styles.emptyState}>No flights recorded yet</div>
+          ) : (
+            <div className={styles.flightsList}>
+              {flights.map(flight => (
+                <div key={flight.id} className={`${styles.flightCard} ${flight.route?.startsWith('MCI') ? styles.mciCard : styles.pdxCard}`}>
+                  {editingFlight === flight.id ? (
+                    <div className={styles.editForm}>
+                      <div className={styles.editRow}>
+                        <select value={editForm.route} onChange={(e) => setEditForm({ ...editForm, route: e.target.value })} className={styles.editSelect}>
+                          {ROUTES.map(r => <option key={r} value={r}>{r}</option>)}
+                        </select>
+                        <select value={editForm.airline} onChange={(e) => setEditForm({ ...editForm, airline: e.target.value })} className={styles.editSelect}>
+                          {AIRLINES.map(a => <option key={a} value={a}>{a}</option>)}
+                        </select>
+                      </div>
+                      <div className={styles.editRow}>
+                        <input type="date" value={editForm.departureDate} onChange={(e) => setEditForm({ ...editForm, departureDate: e.target.value })} className={styles.editInput} />
+                        <input type="text" value={editForm.layover} onChange={(e) => setEditForm({ ...editForm, layover: e.target.value.toUpperCase() })} className={styles.editInput} placeholder="Layover" maxLength={3} style={{ width: '80px' }} />
+                      </div>
+                      <div className={styles.editRow}>
+                        <input type="number" value={editForm.cashPrice} onChange={(e) => setEditForm({ ...editForm, cashPrice: e.target.value })} className={styles.editInput} placeholder="Cash $" />
+                        <input type="number" value={editForm.milesUsed} onChange={(e) => setEditForm({ ...editForm, milesUsed: e.target.value })} className={styles.editInput} placeholder="Miles" />
+                        <input type="number" value={editForm.fees} onChange={(e) => setEditForm({ ...editForm, fees: e.target.value })} className={styles.editInput} placeholder="Fees $" />
+                      </div>
+                      <div className={styles.editActions}>
+                        <button onClick={handleCancelEdit} className={styles.cancelButton}>Cancel</button>
+                        <button onClick={() => handleSaveEdit(flight.id)} disabled={savingEdit} className={styles.saveButton}>{savingEdit ? 'Saving...' : 'Save'}</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={styles.flightHeader}>
+                        <span className={`${styles.flightRoute} ${flight.route?.startsWith('MCI') ? styles.mci : styles.pdx}`}>{flight.route}</span>
+                        <span className={styles.flightAirline}>{flight.airline}</span>
+                      </div>
+                      <div className={styles.flightDetails}>
+                        <span>📅 {flight.departure_time?.split('T')[0]}</span>
+                        {flight.flight_number && <span>✈️ via {flight.flight_number}</span>}
+                        {flight.cash_price && <span>💵 ${flight.cash_price}</span>}
+                        {flight.miles_used && <span>🎯 {parseInt(flight.miles_used).toLocaleString()} mi</span>}
+                        {flight.fees && <span>+${flight.fees}</span>}
+                      </div>
+                      {flight.notes && <div className={styles.flightNotes}>{flight.notes}</div>}
+                      <div className={styles.flightActions}>
+                        <button onClick={() => handleEditFlight(flight)} className={styles.editButton}>Edit</button>
+                        <button onClick={() => handleDeleteFlight(flight.id)} className={styles.deleteButton}>Delete</button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.routeSelector}>
           {ROUTES.map(route => {
@@ -134,6 +285,16 @@ export default function FlightEntry() {
           </div>
         </div>
 
+        <div className={styles.field}>
+          <label className={styles.label}>Layover (optional)</label>
+          <div className={styles.layoverSelector}>
+            <button type="button" className={`${styles.layoverButton} ${!formData.layover ? styles.active : ''}`} onClick={() => handleChange('layover', '')}>Direct</button>
+            {COMMON_LAYOVERS.map(code => (
+              <button key={code} type="button" className={`${styles.layoverButton} ${formData.layover === code ? styles.active : ''}`} onClick={() => handleChange('layover', code)}>{code}</button>
+            ))}
+          </div>
+        </div>
+
         {paymentType === 'cash' ? (
           <>
             <div className={styles.field}>
@@ -184,6 +345,7 @@ export default function FlightEntry() {
 
         <button type="submit" disabled={!isValid || saving} className={styles.primaryButton}>{saving ? 'Saving...' : 'Save Flight'}</button>
       </form>
+      )}
     </div>
   )
 }

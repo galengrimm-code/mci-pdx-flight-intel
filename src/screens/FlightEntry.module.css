@@ -168,3 +168,136 @@
 .successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(217, 119, 6, 0.1); border: 2px solid var(--accent-amber); border-radius: 50%; font-size: 2rem; margin-bottom: var(--space-lg); }
 .successCard h2 { margin-bottom: var(--space-sm); }
 .successCard p { margin-bottom: var(--space-xl); }
+
+/* View Toggle */
+.viewToggle {
+  display: flex;
+  gap: var(--space-sm);
+  background: var(--bg-elevated);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.viewButton {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.viewButton.active { background: var(--accent-cyan); color: #ffffff; }
+
+/* History View */
+.historyView { flex: 1; }
+.loading, .emptyState { text-align: center; color: var(--text-muted); padding: var(--space-xl); }
+.flightsList { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.flightCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.flightCard.mciCard { border-left: 3px solid #f59e0b; }
+.flightCard.pdxCard { border-left: 3px solid #10b981; }
+
+.flightHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.flightRoute {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+}
+
+.flightRoute.mci { color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+.flightRoute.pdx { color: #10b981; background: rgba(16, 185, 129, 0.15); }
+
+.flightAirline { font-size: 0.875rem; color: var(--text-secondary); }
+
+.flightDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.flightNotes {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: var(--space-sm);
+}
+
+.flightActions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+.editButton, .deleteButton, .cancelButton, .saveButton {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.editButton { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+.deleteButton { background: rgba(220, 38, 38, 0.1); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); }
+.cancelButton { background: var(--bg-elevated); color: var(--text-secondary); }
+.saveButton { background: var(--accent-cyan); color: #ffffff; }
+.saveButton:disabled { opacity: 0.5; }
+
+/* Edit Form */
+.editForm { display: flex; flex-direction: column; gap: var(--space-sm); }
+.editRow { display: flex; gap: var(--space-sm); }
+.editInput, .editSelect {
+  flex: 1;
+  padding: var(--space-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+.editInput:focus, .editSelect:focus { border-color: var(--accent-cyan); }
+.editActions { display: flex; gap: var(--space-sm); justify-content: flex-end; margin-top: var(--space-sm); }
+
+/* Layover Selector */
+.layoverSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.layoverButton {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.layoverButton.active {
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(217, 119, 6, 0.05) 100%);
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.1);
+}

@@ -98,8 +98,17 @@ class SheetsService {
   }
 
   async addFlight(flight) {
-    const row = [flight.id || this.generateId(), flight.trip_id || '', flight.airline, flight.flight_number, flight.route, flight.departure_time, flight.scheduled_arrival || '', flight.actual_arrival || '', flight.cash_price || '', flight.miles_used || '', flight.fees || '', flight.booking_lead_days || '', flight.status || 'scheduled', flight.delay_minutes || '', flight.notes || '']
+    const row = [flight.id || this.generateId(), flight.trip_id || '', flight.airline, flight.flight_number || '', flight.route, flight.departure_time, flight.scheduled_arrival || '', flight.actual_arrival || '', flight.cash_price || '', flight.miles_used || '', flight.fees || '', flight.booking_lead_days || '', flight.status || 'scheduled', flight.delay_minutes || '', flight.notes || '']
     return this.appendRow('flights', row)
+  }
+
+  async updateFlight(flight) {
+    const row = [flight.id, flight.trip_id || '', flight.airline, flight.flight_number || '', flight.route, flight.departure_time, flight.scheduled_arrival || '', flight.actual_arrival || '', flight.cash_price || '', flight.miles_used || '', flight.fees || '', flight.booking_lead_days || '', flight.status || 'scheduled', flight.delay_minutes || '', flight.notes || '']
+    return this.updateRow('flights', flight.id, row)
+  }
+
+  async deleteFlight(id) {
+    return this.deleteRow('flights', id)
   }
 
   parseRows(values, headers) {
