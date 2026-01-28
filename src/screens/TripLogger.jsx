@@ -24,6 +24,7 @@ export default function TripLogger() {
   const stopwatch = useStopwatch()
   const [manualTimes, setManualTimes] = useState(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
   const [departureTime, setDepartureTime] = useState('')
+  const [tripDate, setTripDate] = useState(new Date().toISOString().split('T')[0])
   const [sheetError, setSheetError] = useState(null)
 
   const currentSegment = SEGMENTS[currentSegmentIndex]
@@ -63,9 +64,9 @@ export default function TripLogger() {
     setSaving(true)
     try {
       const tripId = sheetsService.generateId()
-      const today = new Date()
-      const dateStr = today.toISOString().split('T')[0]
-      const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' })
+      const selectedDate = new Date(tripDate + 'T12:00:00')
+      const dateStr = tripDate
+      const dayOfWeek = selectedDate.toLocaleDateString('en-US', { weekday: 'long' })
       const segments = mode === 'stopwatch' ? completedSegments : SEGMENTS.map(seg => ({ ...seg, durationMinutes: getManualMinutes(seg.id) })).filter(seg => seg.durationMinutes > 0)
       const totalTime = segments.reduce((sum, seg) => sum + (seg.durationMinutes || 0), 0)
 
@@ -89,6 +90,7 @@ export default function TripLogger() {
     setSaved(false)
     setSheetError(null)
     setDepartureTime('')
+    setTripDate(new Date().toISOString().split('T')[0])
     stopwatch.reset()
     setManualTimes(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
   }
@@ -129,6 +131,11 @@ export default function TripLogger() {
         {DIRECTIONS.map(dir => (
           <button key={dir} className={`${styles.directionButton} ${direction === dir ? styles.active : ''}`} onClick={() => setDirection(dir)} disabled={tripStarted}>{dir}</button>
         ))}
+      </div>
+
+      <div className={styles.dateSelector}>
+        <label className={styles.dateLabel}>📅 Trip Date</label>
+        <input type="date" value={tripDate} onChange={(e) => setTripDate(e.target.value)} className={styles.dateInput} disabled={tripStarted} />
       </div>
 
       {mode === 'stopwatch' ? (
