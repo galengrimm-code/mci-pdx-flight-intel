@@ -1,4 +1,4 @@
-const API_URL = localStorage.getItem('APPS_SCRIPT_URL') || ''
+const API_URL = 'https://script.google.com/macros/s/AKfycbz0n3JtUy2O7JGRe63nmymOWc9EBDprJTDBCx4g7CX8y5aM-sSscqJKecwj6W-N5hkuVA/exec'
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
 class SheetsService {
@@ -33,11 +33,11 @@ class SheetsService {
   }
 
   getApiUrl() {
-    return this.apiUrl || localStorage.getItem('APPS_SCRIPT_URL') || ''
+    return this.apiUrl
   }
 
   isConfigured() {
-    return !!this.getApiUrl()
+    return true
   }
 
   async fetchSheet(tab) {
