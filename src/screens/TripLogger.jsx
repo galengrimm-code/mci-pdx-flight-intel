@@ -13,6 +13,13 @@ const SEGMENTS = [
 
 const DIRECTIONS = ['MCI', 'PDX']
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr + 'T12:00:00')
+  if (isNaN(date)) return dateStr
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
 export default function TripLogger() {
   const [view, setView] = useState('log') // 'log' or 'history'
   const [mode, setMode] = useState('stopwatch')
@@ -243,7 +250,7 @@ export default function TripLogger() {
                   ) : (
                     <>
                       <div className={styles.tripHeader}>
-                        <span className={styles.tripDate}>{trip.date}</span>
+                        <span className={styles.tripDate}>{formatDate(trip.date)}</span>
                         <span className={`${styles.tripDirection} ${styles[trip.direction?.toLowerCase()]}`}>{trip.direction}</span>
                       </div>
                       <div className={styles.tripDetails}>

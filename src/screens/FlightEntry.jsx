@@ -7,6 +7,20 @@ const AIRLINES = ['Alaska', 'Southwest', 'Delta', 'United', 'American', 'Frontie
 const ROUTES = ['MCI to PDX', 'PDX to MCI']
 const COMMON_LAYOVERS = ['SEA', 'DEN', 'PHX', 'LAX', 'SFO', 'ORD', 'DFW', 'SLC', 'MSP']
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  if (isNaN(date)) return dateStr
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+const formatTime = (dateStr) => {
+  if (!dateStr || !dateStr.includes('T')) return ''
+  const date = new Date(dateStr)
+  if (isNaN(date)) return ''
+  return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+}
+
 export default function FlightEntry() {
   const [view, setView] = useState('add') // 'add' or 'history'
   const [formData, setFormData] = useState({
@@ -211,7 +225,7 @@ export default function FlightEntry() {
                         <span className={styles.flightAirline}>{flight.airline}</span>
                       </div>
                       <div className={styles.flightDetails}>
-                        <span>📅 {flight.departure_time?.split('T')[0]}</span>
+                        <span>📅 {formatDate(flight.departure_time)}{formatTime(flight.departure_time) && ` at ${formatTime(flight.departure_time)}`}</span>
                         {flight.flight_number && <span>✈️ via {flight.flight_number}</span>}
                         {flight.cash_price && <span>💵 ${flight.cash_price}</span>}
                         {flight.miles_used && <span>🎯 {parseInt(flight.miles_used).toLocaleString()} mi</span>}
