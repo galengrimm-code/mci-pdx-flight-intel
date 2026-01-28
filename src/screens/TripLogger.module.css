@@ -256,3 +256,97 @@
 .successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(8, 145, 178, 0.1); border: 2px solid var(--accent-cyan); border-radius: 50%; font-size: 2rem; color: var(--accent-cyan); margin-bottom: var(--space-lg); }
 .successCard h2 { margin-bottom: var(--space-sm); }
 .successCard p { margin-bottom: var(--space-xl); }
+
+/* View Toggle */
+.viewToggle {
+  display: flex;
+  gap: var(--space-sm);
+  background: var(--bg-elevated);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.viewButton {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.viewButton.active { background: var(--accent-cyan); color: #ffffff; }
+.viewButton:disabled { opacity: 0.5; }
+
+/* History View */
+.historyView { flex: 1; }
+.loading, .emptyState { text-align: center; color: var(--text-muted); padding: var(--space-xl); }
+.tripsList { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.tripCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.tripHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.tripDate { font-family: var(--font-mono); font-weight: 600; }
+.tripDirection { font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 500; }
+
+.tripDetails {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.tripNotes {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: var(--space-sm);
+}
+
+.tripActions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+.editButton, .deleteButton, .cancelButton, .saveButton {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.editButton { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+.deleteButton { background: rgba(220, 38, 38, 0.1); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); }
+.cancelButton { background: var(--bg-elevated); color: var(--text-secondary); }
+.saveButton { background: var(--accent-cyan); color: #ffffff; }
+.saveButton:disabled { opacity: 0.5; }
+
+/* Edit Form */
+.editForm { display: flex; flex-direction: column; gap: var(--space-sm); }
+.editRow { display: flex; gap: var(--space-sm); }
+.editInput, .editSelect {
+  flex: 1;
+  padding: var(--space-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+.editInput:focus, .editSelect:focus { border-color: var(--accent-cyan); }
+.editActions { display: flex; gap: var(--space-sm); justify-content: flex-end; margin-top: var(--space-sm); }

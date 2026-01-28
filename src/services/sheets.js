@@ -32,9 +32,33 @@ class SheetsService {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ tab, rowData })
+      body: JSON.stringify({ tab, rowData, action: 'append' })
     })
     if (!response.ok) throw new Error(`Failed to append to ${tab}`)
+    return await response.json()
+  }
+
+  async updateRow(tab, id, rowData) {
+    const url = this.getApiUrl()
+    if (!url) throw new Error('API URL not configured')
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ tab, id, rowData, action: 'update' })
+    })
+    if (!response.ok) throw new Error(`Failed to update ${tab}`)
+    return await response.json()
+  }
+
+  async deleteRow(tab, id) {
+    const url = this.getApiUrl()
+    if (!url) throw new Error('API URL not configured')
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ tab, id, action: 'delete' })
+    })
+    if (!response.ok) throw new Error(`Failed to delete from ${tab}`)
     return await response.json()
   }
 
@@ -46,6 +70,15 @@ class SheetsService {
   async addTrip(trip) {
     const row = [trip.id || this.generateId(), trip.date, trip.direction, trip.flight_time, trip.day_of_week, trip.notes || '', trip.total_time || '']
     return this.appendRow('trips', row)
+  }
+
+  async updateTrip(trip) {
+    const row = [trip.id, trip.date, trip.direction, trip.flight_time, trip.day_of_week, trip.notes || '', trip.total_time || '']
+    return this.updateRow('trips', trip.id, row)
+  }
+
+  async deleteTrip(id) {
+    return this.deleteRow('trips', id)
   }
 
   async getTimeSegments(tripId = null) {

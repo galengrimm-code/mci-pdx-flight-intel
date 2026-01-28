@@ -40,20 +40,63 @@ function doPost(e) {
     const payload = JSON.parse(e.postData.contents);
     const tab = payload.tab;
     const rowData = payload.rowData;
-    
-    if (!tab || !rowData) {
-      return jsonResponse({ error: 'Tab and rowData required' }, 400);
+    const action = payload.action || 'append';
+    const id = payload.id;
+
+    if (!tab) {
+      return jsonResponse({ error: 'Tab required' }, 400);
     }
-    
+
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(tab);
-    
+
     if (!sheet) {
       return jsonResponse({ error: 'Tab ' + tab + ' not found' }, 404);
     }
-    
-    sheet.appendRow(rowData);
-    
-    return jsonResponse({ success: true, rowsAdded: 1 });
+
+    if (action === 'update') {
+      // Find row by ID (assumes ID is in column A)
+      if (!id || !rowData) {
+        return jsonResponse({ error: 'id and rowData required for update' }, 400);
+      }
+      const data = sheet.getDataRange().getValues();
+      let rowIndex = -1;
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][0] === id) {
+          rowIndex = i + 1; // Sheets are 1-indexed
+          break;
+        }
+      }
+      if (rowIndex === -1) {
+        return jsonResponse({ error: 'Row with id ' + id + ' not found' }, 404);
+      }
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+      return jsonResponse({ success: true, rowsUpdated: 1 });
+    } else if (action === 'delete') {
+      // Delete row by ID
+      if (!id) {
+        return jsonResponse({ error: 'id required for delete' }, 400);
+      }
+      const data = sheet.getDataRange().getValues();
+      let rowIndex = -1;
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][0] === id) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+      if (rowIndex === -1) {
+        return jsonResponse({ error: 'Row with id ' + id + ' not found' }, 404);
+      }
+      sheet.deleteRow(rowIndex);
+      return jsonResponse({ success: true, rowsDeleted: 1 });
+    } else {
+      // Default: append
+      if (!rowData) {
+        return jsonResponse({ error: 'rowData required' }, 400);
+      }
+      sheet.appendRow(rowData);
+      return jsonResponse({ success: true, rowsAdded: 1 });
+    }
   } catch (error) {
     return jsonResponse({ error: error.message }, 500);
   }
