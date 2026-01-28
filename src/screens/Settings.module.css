@@ -1,7 +1,8 @@
 .container {
   padding: var(--space-lg);
-  padding-top: max(var(--space-lg), env(safe-area-inset-top));
-  min-height: 100vh;
+  padding-top: max(var(--space-xl), env(safe-area-inset-top));
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .header { text-align: center; margin-bottom: var(--space-xl); }
@@ -10,22 +11,22 @@
 
 .section {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .section h2 { font-size: 0.875rem; margin-bottom: var(--space-md); }
 
 .field { margin-bottom: var(--space-md); }
-.label { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--space-sm); }
+.label { display: block; font-size: 0.8125rem; color: var(--text-secondary); font-weight: 500; margin-bottom: var(--space-sm); }
 
 .textarea {
   width: 100%;
   padding: var(--space-md);
   background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -33,7 +34,7 @@
   resize: vertical;
 }
 
-.textarea:focus { border-color: var(--accent-cyan); }
+.textarea:focus { border-color: var(--accent-sky); }
 .hint { font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-sm); }
 
 .buttons { display: flex; gap: var(--space-sm); }
@@ -41,7 +42,7 @@
 .primaryButton {
   flex: 1;
   padding: var(--space-md);
-  background: var(--accent-cyan);
+  background: var(--accent-sky);
   color: #ffffff;
   border-radius: var(--radius-md);
   font-weight: 600;
@@ -54,7 +55,6 @@
   flex: 1;
   padding: var(--space-md);
   background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   border-radius: var(--radius-md);
   font-size: 0.875rem;
@@ -70,8 +70,8 @@
   text-align: center;
 }
 
-.testResult.success { background: rgba(8, 145, 178, 0.1); color: var(--accent-cyan); border: 1px solid rgba(8, 145, 178, 0.25); }
-.testResult.error { background: rgba(220, 38, 38, 0.1); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); }
+.testResult.success { background: var(--accent-sky-light); color: var(--accent-sky); }
+.testResult.error { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
 
 .instructions {
   list-style: none;
@@ -103,5 +103,5 @@
   border-radius: 50%;
   font-size: 0.625rem;
   font-weight: 600;
-  color: var(--accent-cyan);
+  color: var(--accent-sky);
 }

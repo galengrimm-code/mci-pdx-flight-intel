@@ -1,7 +1,8 @@
 .container {
   padding: var(--space-lg);
-  padding-top: max(var(--space-lg), env(safe-area-inset-top));
-  min-height: 100vh;
+  padding-top: max(var(--space-xl), env(safe-area-inset-top));
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .header { text-align: center; margin-bottom: var(--space-xl); }
@@ -10,10 +11,11 @@
 
 .loading { display: flex; align-items: center; justify-content: center; min-height: 200px; color: var(--text-muted); }
 
+/* Tabs */
 .tabs {
   display: flex;
-  gap: var(--space-sm);
-  background: var(--bg-card);
+  gap: var(--space-xs);
+  background: var(--bg-elevated);
   padding: var(--space-xs);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-xl);
@@ -26,36 +28,75 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-muted);
+  transition: all 0.2s;
 }
 
-.tab.active { background: var(--bg-elevated); color: var(--text-primary); }
+.tab.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
 
 .tabContent { display: flex; flex-direction: column; gap: var(--space-lg); }
 
-.sectionTitle { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: var(--space-md); }
+/* Section titles */
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: var(--space-md);
+}
+
+.mciHeader { color: var(--mci); }
+.pdxHeader { color: var(--pdx); }
+
+/* Airport Cards */
+.airportCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+@media (max-width: 400px) {
+  .airportCards { grid-template-columns: 1fr; }
+}
 
 .summaryCard {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-.summaryCard h3 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--space-md); }
+.mciCard { border-top: 3px solid var(--mci); }
+.pdxCard { border-top: 3px solid var(--pdx); }
 
-.summaryGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); }
+.summaryCard h3 {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+}
+
+.summaryGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
 .summaryItem { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.summaryValue { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; }
+.summaryValue { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; }
 .summaryLabel { font-size: 0.625rem; color: var(--text-muted); text-transform: uppercase; }
 
+/* Segment list */
 .segmentList { display: flex; flex-direction: column; gap: var(--space-sm); }
 
 .segmentCard {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
 }
+
+.mciSegment { border-left: 3px solid var(--mci); }
+.pdxSegment { border-left: 3px solid var(--pdx); }
 
 .segmentHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); }
 .segmentType { font-size: 0.875rem; font-weight: 500; text-transform: capitalize; }
@@ -63,62 +104,36 @@
 
 .segmentStats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
 .segmentStat { display: flex; flex-direction: column; align-items: center; }
-.statValue { font-family: var(--font-mono); font-size: 1rem; font-weight: 500; color: var(--accent-cyan); }
+.statValue { font-family: var(--font-mono); font-size: 1rem; font-weight: 500; color: var(--accent-sky); }
+.mciSegment .statValue { color: var(--mci); }
+.pdxSegment .statValue { color: var(--pdx); }
 .statLabel { font-size: 0.625rem; color: var(--text-muted); text-transform: uppercase; }
 
+/* Price card */
 .priceCard {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-.priceCard h3 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--space-md); }
+.priceCard h3 {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+}
 
 .priceGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); }
 .priceItem { display: flex; flex-direction: column; gap: 2px; }
 .priceLabel { font-size: 0.75rem; color: var(--text-muted); }
 .priceValue { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; }
 
-.insight { font-size: 0.875rem; color: var(--text-secondary); padding-top: var(--space-md); border-top: 1px solid var(--border-subtle); }
+.insight {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
 
 .empty { text-align: center; padding: var(--space-xl); color: var(--text-muted); font-size: 0.875rem; }
-
-/* Airport Cards Layout */
-.airportCards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-}
-
-@media (max-width: 500px) {
-  .airportCards { grid-template-columns: 1fr; }
-}
-
-/* MCI Theme */
-.mciCard {
-  border-color: rgba(245, 158, 11, 0.3);
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-card) 100%);
-}
-
-.mciHeader { color: #f59e0b; }
-
-.mciSegment {
-  border-left: 3px solid #f59e0b;
-}
-
-.mciSegment .statValue { color: #f59e0b; }
-
-/* PDX Theme */
-.pdxCard {
-  border-color: rgba(16, 185, 129, 0.3);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, var(--bg-card) 100%);
-}
-
-.pdxHeader { color: #10b981; }
-
-.pdxSegment {
-  border-left: 3px solid #10b981;
-}
-
-.pdxSegment .statValue { color: #10b981; }

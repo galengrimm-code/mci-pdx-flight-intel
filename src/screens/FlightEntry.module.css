@@ -1,193 +1,18 @@
 .container {
   padding: var(--space-lg);
-  padding-top: max(var(--space-lg), env(safe-area-inset-top));
-  min-height: 100vh;
+  padding-top: max(var(--space-xl), env(safe-area-inset-top));
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .header { text-align: center; margin-bottom: var(--space-xl); }
 .header h1 { margin-bottom: var(--space-xs); }
 .header p { color: var(--text-muted); font-size: 0.875rem; }
 
-.form { display: flex; flex-direction: column; gap: var(--space-lg); }
-
-.routeSelector { display: flex; gap: var(--space-sm); }
-
-.routeButton {
-  flex: 1;
-  padding: var(--space-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  transition: all 0.2s;
-}
-
-.routeButton.mci { border-color: rgba(245, 158, 11, 0.3); }
-.routeButton.mci.active {
-  border-color: #f59e0b;
-  color: #f59e0b;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
-}
-
-.routeButton.pdx { border-color: rgba(16, 185, 129, 0.3); }
-.routeButton.pdx.active {
-  border-color: #10b981;
-  color: #10b981;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
-}
-
-.field { display: flex; flex-direction: column; gap: var(--space-sm); }
-.label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-
-.airlineGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
-
-.airlineButton {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  transition: all 0.2s;
-}
-
-.airlineButton.active {
-  border-color: var(--accent-amber);
-  color: var(--accent-amber);
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(217, 119, 6, 0.05) 100%);
-  box-shadow: 0 0 12px rgba(217, 119, 6, 0.1);
-}
-
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
-
-.input {
-  width: 100%;
-  padding: var(--space-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-}
-
-.input:focus { border-color: var(--accent-cyan); }
-
-.inputWithPrefix {
-  display: flex;
-  align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.inputWithPrefix:focus-within { border-color: var(--accent-cyan); }
-.prefix { padding: var(--space-md); padding-right: 0; color: var(--text-muted); font-family: var(--font-mono); }
-.inputWithPrefix .input { border: none; background: transparent; }
-
-.paymentToggle, .tripTypeToggle {
-  display: flex;
-  gap: var(--space-sm);
-  background: var(--bg-card);
-  padding: var(--space-xs);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-}
-
-.paymentButton, .tripTypeButton {
-  flex: 1;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  transition: all 0.2s;
-}
-
-.paymentButton.active {
-  background: linear-gradient(135deg, rgba(8, 145, 178, 0.2) 0%, rgba(8, 145, 178, 0.1) 100%);
-  color: var(--accent-cyan);
-  box-shadow: 0 0 12px rgba(8, 145, 178, 0.1);
-}
-
-.tripTypeButton.active {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(124, 58, 237, 0.1) 100%);
-  color: #a78bfa;
-  box-shadow: 0 0 12px rgba(124, 58, 237, 0.1);
-}
-
-/* Ticket Ticker */
-.ticketTicker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-sm);
-}
-
-.tickerButton {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--accent-cyan);
-  transition: all 0.2s;
-}
-
-.tickerButton:active {
-  background: linear-gradient(135deg, rgba(8, 145, 178, 0.2) 0%, rgba(8, 145, 178, 0.1) 100%);
-  box-shadow: 0 0 12px rgba(8, 145, 178, 0.15);
-}
-
-.tickerValue {
-  min-width: 48px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--accent-cyan);
-}
-
-.perTicket {
-  margin-top: var(--space-xs);
-  font-size: 0.8rem;
-  color: var(--accent-cyan);
-  font-family: var(--font-mono);
-}
-
-.primaryButton {
-  width: 100%;
-  padding: var(--space-md) var(--space-lg);
-  background: var(--accent-cyan);
-  color: #ffffff;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  margin-top: var(--space-md);
-}
-
-.primaryButton:disabled { opacity: 0.5; }
-
-.successCard { min-height: calc(100vh - 100px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: var(--space-xl); }
-.successIcon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(217, 119, 6, 0.1); border: 2px solid var(--accent-amber); border-radius: 50%; font-size: 2rem; margin-bottom: var(--space-lg); }
-.successCard h2 { margin-bottom: var(--space-sm); }
-.successCard p { margin-bottom: var(--space-xl); }
-
 /* View Toggle */
 .viewToggle {
   display: flex;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   background: var(--bg-elevated);
   padding: var(--space-xs);
   border-radius: var(--radius-md);
@@ -202,24 +27,238 @@
   font-weight: 500;
   color: var(--text-muted);
   background: transparent;
+  transition: all 0.2s;
 }
 
-.viewButton.active { background: var(--accent-cyan); color: #ffffff; }
+.viewButton.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
 
-/* History View */
+/* Form */
+.form { display: flex; flex-direction: column; gap: var(--space-lg); }
+
+/* Route selector */
+.routeSelector { display: flex; gap: var(--space-sm); }
+
+.routeButton {
+  flex: 1;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.routeButton.mci.active {
+  background: var(--mci-light);
+  color: var(--mci);
+  box-shadow: none;
+}
+
+.routeButton.pdx.active {
+  background: var(--pdx-light);
+  color: var(--pdx);
+  box-shadow: none;
+}
+
+/* Fields */
+.field { display: flex; flex-direction: column; gap: var(--space-sm); }
+.label { font-size: 0.8125rem; color: var(--text-secondary); font-weight: 500; }
+
+/* Airline grid */
+.airlineGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
+
+.airlineButton {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.airlineButton.active {
+  background: var(--accent-sky-light);
+  color: var(--accent-sky);
+  box-shadow: none;
+}
+
+/* Input row */
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+
+.input {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.input:focus { border-color: var(--accent-sky); }
+
+.inputWithPrefix {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.inputWithPrefix:focus-within { border-color: var(--accent-sky); }
+.prefix { padding: var(--space-md); padding-right: 0; color: var(--text-muted); }
+.inputWithPrefix .input { border: none; background: transparent; }
+
+/* Toggles */
+.paymentToggle, .tripTypeToggle {
+  display: flex;
+  gap: var(--space-xs);
+  background: var(--bg-elevated);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+}
+
+.paymentButton, .tripTypeButton {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+
+.paymentButton.active, .tripTypeButton.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Ticket Ticker */
+.ticketTicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.tickerButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  font-size: 1.5rem;
+  color: var(--accent-sky);
+  transition: background 0.2s;
+}
+
+.tickerButton:active { background: var(--accent-sky-light); }
+
+.tickerValue {
+  min-width: 48px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.perTicket {
+  margin-top: var(--space-xs);
+  font-size: 0.8125rem;
+  color: var(--accent-sky);
+}
+
+/* Layover */
+.layoverSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.layoverButton {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.layoverButton.active {
+  background: var(--accent-sky-light);
+  color: var(--accent-sky);
+  box-shadow: none;
+}
+
+/* Primary button */
+.primaryButton {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--accent-sky);
+  color: #ffffff;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: var(--space-md);
+}
+
+.primaryButton:disabled { opacity: 0.5; }
+
+/* Success */
+.successCard {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.successIcon {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-sky-light);
+  border-radius: 50%;
+  font-size: 2rem;
+  margin-bottom: var(--space-lg);
+}
+
+.successCard h2 { margin-bottom: var(--space-sm); }
+.successCard p { margin-bottom: var(--space-xl); }
+
+/* History */
 .historyView { flex: 1; }
 .loading, .emptyState { text-align: center; color: var(--text-muted); padding: var(--space-xl); }
 .flightsList { display: flex; flex-direction: column; gap: var(--space-md); }
 
 .flightCard {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
 }
 
-.flightCard.mciCard { border-left: 3px solid #f59e0b; }
-.flightCard.pdxCard { border-left: 3px solid #10b981; }
+.flightCard.mciCard { border-left: 3px solid var(--mci); }
+.flightCard.pdxCard { border-left: 3px solid var(--pdx); }
 
 .flightHeader {
   display: flex;
@@ -229,15 +268,12 @@
 }
 
 .flightRoute {
-  font-family: var(--font-mono);
   font-weight: 600;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
 }
 
-.flightRoute.mci { color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
-.flightRoute.pdx { color: #10b981; background: rgba(16, 185, 129, 0.15); }
+.flightRoute.mci { color: var(--mci); }
+.flightRoute.pdx { color: var(--pdx); }
 
 .flightAirline { font-size: 0.875rem; color: var(--text-secondary); }
 
@@ -245,7 +281,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   margin-bottom: var(--space-sm);
 }
@@ -253,7 +289,6 @@
 .flightNotes {
   font-size: 0.75rem;
   color: var(--text-muted);
-  font-style: italic;
   margin-bottom: var(--space-sm);
 }
 
@@ -266,53 +301,28 @@
 .editButton, .deleteButton, .cancelButton, .saveButton {
   padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   font-weight: 500;
 }
 
-.editButton { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
-.deleteButton { background: rgba(220, 38, 38, 0.1); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); }
+.editButton { background: var(--bg-elevated); color: var(--text-secondary); }
+.deleteButton { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
 .cancelButton { background: var(--bg-elevated); color: var(--text-secondary); }
-.saveButton { background: var(--accent-cyan); color: #ffffff; }
+.saveButton { background: var(--accent-sky); color: #ffffff; }
 .saveButton:disabled { opacity: 0.5; }
 
 /* Edit Form */
 .editForm { display: flex; flex-direction: column; gap: var(--space-sm); }
 .editRow { display: flex; gap: var(--space-sm); }
+
 .editInput, .editSelect {
   flex: 1;
   padding: var(--space-sm);
   background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
-  color: var(--text-primary);
 }
-.editInput:focus, .editSelect:focus { border-color: var(--accent-cyan); }
+
+.editInput:focus, .editSelect:focus { border-color: var(--accent-sky); }
 .editActions { display: flex; gap: var(--space-sm); justify-content: flex-end; margin-top: var(--space-sm); }
-
-/* Layover Selector */
-.layoverSelector {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-.layoverButton {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: all 0.2s;
-}
-
-.layoverButton.active {
-  border-color: var(--accent-amber);
-  color: var(--accent-amber);
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(217, 119, 6, 0.05) 100%);
-  box-shadow: 0 0 12px rgba(217, 119, 6, 0.1);
-}
