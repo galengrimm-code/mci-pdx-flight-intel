@@ -5,7 +5,7 @@ import styles from './FlightEntry.module.css'
 
 const AIRLINES = ['Alaska', 'Southwest', 'Delta', 'United', 'American', 'Frontier', 'Spirit']
 const ROUTES = ['MCI to PDX', 'PDX to MCI']
-const COMMON_LAYOVERS = ['SEA', 'DEN', 'PHX', 'LAX', 'SFO', 'ORD', 'DFW']
+const COMMON_LAYOVERS = ['SEA', 'DEN', 'PHX', 'LAX', 'SFO', 'ORD', 'DFW', 'SLC', 'MSP']
 
 export default function FlightEntry() {
   const [view, setView] = useState('add') // 'add' or 'history'
@@ -262,10 +262,10 @@ export default function FlightEntry() {
 
         <div className={styles.field}>
           <label className={styles.label}>Number of Tickets</label>
-          <div className={styles.ticketSelector}>
-            {[1, 2, 3, 4].map(num => (
-              <button key={num} type="button" className={`${styles.ticketButton} ${parseInt(formData.tickets) === num ? styles.active : ''}`} onClick={() => handleChange('tickets', num.toString())}>{num}</button>
-            ))}
+          <div className={styles.ticketTicker}>
+            <button type="button" className={styles.tickerButton} onClick={() => handleChange('tickets', Math.max(1, ticketCount - 1).toString())}>−</button>
+            <span className={styles.tickerValue}>{ticketCount}</span>
+            <button type="button" className={styles.tickerButton} onClick={() => handleChange('tickets', Math.min(10, ticketCount + 1).toString())}>+</button>
           </div>
         </div>
 

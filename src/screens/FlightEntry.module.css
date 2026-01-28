@@ -119,30 +119,45 @@
   box-shadow: 0 0 12px rgba(124, 58, 237, 0.1);
 }
 
-/* Ticket Selector */
-.ticketSelector {
+/* Ticket Ticker */
+.ticketTicker {
   display: flex;
-  gap: var(--space-sm);
-}
-
-.ticketButton {
-  flex: 1;
-  padding: var(--space-md);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  padding: var(--space-sm);
+}
+
+.tickerButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--accent-cyan);
   transition: all 0.2s;
 }
 
-.ticketButton.active {
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
+.tickerButton:active {
   background: linear-gradient(135deg, rgba(8, 145, 178, 0.2) 0%, rgba(8, 145, 178, 0.1) 100%);
-  box-shadow: 0 0 16px rgba(8, 145, 178, 0.15);
+  box-shadow: 0 0 12px rgba(8, 145, 178, 0.15);
+}
+
+.tickerValue {
+  min-width: 48px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
 }
 
 .perTicket {
