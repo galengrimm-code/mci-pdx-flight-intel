@@ -75,22 +75,28 @@ export default function Dashboard() {
       )}
 
       {configured && (
-        <section className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <span className={styles.statValue}>{loading ? '—' : stats.totalTrips}</span>
-            <span className={styles.statLabel}>Total Trips</span>
+        <section className={styles.statsSection}>
+          <div className={styles.airportStats}>
+            <div className={`${styles.airportCard} ${styles.mciCard}`}>
+              <span className={styles.airportCode}>MCI</span>
+              <span className={styles.airportTime}>{loading ? '—' : `${stats.mciAvgTime}m`}</span>
+              <span className={styles.airportLabel}>Avg Lead Time</span>
+            </div>
+            <div className={`${styles.airportCard} ${styles.pdxCard}`}>
+              <span className={styles.airportCode}>PDX</span>
+              <span className={styles.airportTime}>{loading ? '—' : `${stats.pdxAvgTime}m`}</span>
+              <span className={styles.airportLabel}>Avg Lead Time</span>
+            </div>
           </div>
-          <div className={styles.statCard}>
-            <span className={`${styles.statValue} ${styles.mci}`}>{loading ? '—' : `${stats.mciAvgTime}m`}</span>
-            <span className={styles.statLabel}>MCI Avg Time</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={`${styles.statValue} ${styles.pdx}`}>{loading ? '—' : `${stats.pdxAvgTime}m`}</span>
-            <span className={styles.statLabel}>PDX Avg Time</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={`${styles.statValue} ${styles.accent}`}>{loading ? '—' : `${stats.avgMilesValue}¢`}</span>
-            <span className={styles.statLabel}>Avg Miles Value</span>
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <span className={styles.statValue}>{loading ? '—' : stats.totalTrips}</span>
+              <span className={styles.statLabel}>Total Trips</span>
+            </div>
+            <div className={styles.statCard}>
+              <span className={`${styles.statValue} ${styles.accent}`}>{loading ? '—' : `${stats.avgMilesValue}¢`}</span>
+              <span className={styles.statLabel}>Avg Miles Value</span>
+            </div>
           </div>
         </section>
       )}

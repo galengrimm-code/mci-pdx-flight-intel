@@ -66,11 +66,26 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--text-secondary);
+  transition: all 0.2s;
 }
 
-.directionButton.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(8, 145, 178, 0.08); }
+.directionButton.mci { border-color: rgba(245, 158, 11, 0.3); }
+.directionButton.mci.active {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.08) 100%);
+}
+
+.directionButton.pdx { border-color: rgba(16, 185, 129, 0.3); }
+.directionButton.pdx.active {
+  border-color: #10b981;
+  color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.08) 100%);
+}
+
 .directionButton:disabled { opacity: 0.5; }
 
 .dateSelector {
@@ -300,7 +315,21 @@
 }
 
 .tripDate { font-family: var(--font-mono); font-weight: 600; }
-.tripDirection { font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 500; }
+.tripDirection {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+}
+.tripDirection.mci {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+}
+.tripDirection.pdx {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+}
 
 .tripDetails {
   display: flex;

@@ -244,7 +244,7 @@ export default function TripLogger() {
                     <>
                       <div className={styles.tripHeader}>
                         <span className={styles.tripDate}>{trip.date}</span>
-                        <span className={styles.tripDirection}>{trip.direction}</span>
+                        <span className={`${styles.tripDirection} ${styles[trip.direction?.toLowerCase()]}`}>{trip.direction}</span>
                       </div>
                       <div className={styles.tripDetails}>
                         <span>✈️ {trip.flight_time || '—'}</span>
@@ -272,7 +272,7 @@ export default function TripLogger() {
 
       <div className={styles.directionSelector}>
         {DIRECTIONS.map(dir => (
-          <button key={dir} className={`${styles.directionButton} ${direction === dir ? styles.active : ''}`} onClick={() => setDirection(dir)} disabled={tripStarted}>{dir}</button>
+          <button key={dir} className={`${styles.directionButton} ${styles[dir.toLowerCase()]} ${direction === dir ? styles.active : ''}`} onClick={() => setDirection(dir)} disabled={tripStarted}>{dir}</button>
         ))}
       </div>
 

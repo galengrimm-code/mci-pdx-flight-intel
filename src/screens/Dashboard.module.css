@@ -51,11 +51,66 @@
 .setupBanner > div { flex: 1; }
 .setupLink { color: var(--accent-blue); font-weight: 500; font-size: 0.875rem; text-decoration: none; }
 
+.statsSection {
+  margin-bottom: var(--space-xl);
+}
+
+.airportStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.airportCard {
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.mciCard {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.pdxCard {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.08) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.airportCode {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.mciCard .airportCode { color: #f59e0b; }
+.pdxCard .airportCode { color: #10b981; }
+
+.airportTime {
+  font-family: var(--font-mono);
+  font-size: 2.25rem;
+  font-weight: 600;
+}
+
+.mciCard .airportTime { color: #f59e0b; }
+.pdxCard .airportTime { color: #10b981; }
+
+.airportLabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-md);
-  margin-bottom: var(--space-xl);
 }
 
 .statCard {
@@ -71,8 +126,6 @@
 .statCard.wide { grid-column: span 2; }
 .statValue { font-family: var(--font-mono); font-size: 1.75rem; font-weight: 600; }
 .statValue.accent { color: var(--accent-cyan); }
-.statValue.mci { color: #f59e0b; }
-.statValue.pdx { color: #10b981; }
 .statLabel { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
 
 .sectionTitle {
