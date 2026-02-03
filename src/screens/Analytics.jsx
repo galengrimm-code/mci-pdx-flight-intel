@@ -3,6 +3,13 @@ import { motion } from 'framer-motion'
 import sheetsService from '../services/sheets'
 import styles from './Analytics.module.css'
 
+const SEGMENT_LABELS = {
+  'house_to_airport': 'House to Airport',
+  'terminal_to_parking': 'Terminal to Parking',
+  'parking_to_security': 'Parking/Rental to Curb',
+  'security_to_gate': 'Curb to Gate',
+}
+
 export default function Analytics() {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState({ trips: [], segments: [], flights: [] })
@@ -138,7 +145,7 @@ export default function Analytics() {
                     {segmentStatsByAirport.mci.map(stat => (
                       <div key={stat.type} className={`${styles.segmentCard} ${styles.mciSegment}`}>
                         <div className={styles.segmentHeader}>
-                          <span className={styles.segmentType}>{stat.type.replace(/_/g, ' ')}</span>
+                          <span className={styles.segmentType}>{SEGMENT_LABELS[stat.type] || stat.type.replace(/_/g, ' ')}</span>
                           <span className={styles.segmentCount}>{stat.count} samples</span>
                         </div>
                         <div className={styles.segmentStats}>
@@ -158,7 +165,7 @@ export default function Analytics() {
                     {segmentStatsByAirport.pdx.map(stat => (
                       <div key={stat.type} className={`${styles.segmentCard} ${styles.pdxSegment}`}>
                         <div className={styles.segmentHeader}>
-                          <span className={styles.segmentType}>{stat.type.replace(/_/g, ' ')}</span>
+                          <span className={styles.segmentType}>{SEGMENT_LABELS[stat.type] || stat.type.replace(/_/g, ' ')}</span>
                           <span className={styles.segmentCount}>{stat.count} samples</span>
                         </div>
                         <div className={styles.segmentStats}>
