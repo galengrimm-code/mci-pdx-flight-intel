@@ -18,7 +18,9 @@ const ALL_AIRPORTS = [...PRIMARY_AIRPORTS, ...SECONDARY_AIRPORTS]
 
 const formatDate = (dateStr) => {
   if (!dateStr) return ''
-  const date = new Date(dateStr + 'T12:00:00')
+  // Handle both "2025-07-15" and "2025-07-15T05:00:00.000Z" formats
+  const dateOnly = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr
+  const date = new Date(dateOnly + 'T12:00:00')
   if (isNaN(date)) return dateStr
   return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`
 }
