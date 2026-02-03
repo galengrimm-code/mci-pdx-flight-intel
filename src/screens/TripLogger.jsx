@@ -8,8 +8,8 @@ import styles from './TripLogger.module.css'
 const SEGMENTS = [
   { id: 'house_to_airport', label: 'House to Airport', icon: '🏠' },
   { id: 'terminal_to_parking', label: 'Terminal to Parking', icon: '🅿️' },
-  { id: 'parking_to_security', label: 'Parking/Rental to Security', icon: '🚶' },
-  { id: 'security_to_gate', label: 'Security to Gate', icon: '🔒' },
+  { id: 'parking_to_security', label: 'Parking/Rental to Curb', icon: '🚶' },
+  { id: 'security_to_gate', label: 'Curb to Gate', icon: '🔒' },
 ]
 
 const PRIMARY_AIRPORTS = ['MCI', 'PDX']
