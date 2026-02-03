@@ -12,7 +12,9 @@ const SEGMENTS = [
   { id: 'security_to_gate', label: 'Security to Gate', icon: '🔒' },
 ]
 
-const DIRECTIONS = ['MCI', 'PDX']
+const PRIMARY_AIRPORTS = ['MCI', 'PDX']
+const SECONDARY_AIRPORTS = ['PHX', 'MCO']
+const ALL_AIRPORTS = [...PRIMARY_AIRPORTS, ...SECONDARY_AIRPORTS]
 
 const formatDate = (dateStr) => {
   if (!dateStr) return ''
@@ -25,7 +27,7 @@ export default function TripLogger() {
   const navigate = useNavigate()
   const [view, setView] = useState('log') // 'log' or 'history'
   const [mode, setMode] = useState('stopwatch')
-  const [direction, setDirection] = useState(DIRECTIONS[0])
+  const [direction, setDirection] = useState(PRIMARY_AIRPORTS[0])
   const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0)
   const [completedSegments, setCompletedSegments] = useState([])
   const [tripStarted, setTripStarted] = useState(false)
@@ -222,7 +224,7 @@ export default function TripLogger() {
                       <div className={styles.editRow}>
                         <input type="date" value={editForm.date} onChange={(e) => setEditForm({ ...editForm, date: e.target.value })} className={styles.editInput} />
                         <select value={editForm.direction} onChange={(e) => setEditForm({ ...editForm, direction: e.target.value })} className={styles.editSelect}>
-                          {DIRECTIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                          {ALL_AIRPORTS.map(d => <option key={d} value={d}>{d}</option>)}
                         </select>
                       </div>
                       <div className={styles.editRow}>
@@ -265,10 +267,17 @@ export default function TripLogger() {
             <button className={`${styles.modeButton} ${mode === 'manual' ? styles.active : ''}`} onClick={() => setMode('manual')} disabled={tripStarted}>✏️ Manual</button>
           </div>
 
-      <div className={styles.directionSelector}>
-        {DIRECTIONS.map(dir => (
-          <button key={dir} className={`${styles.directionButton} ${styles[dir.toLowerCase()]} ${direction === dir ? styles.active : ''}`} onClick={() => setDirection(dir)} disabled={tripStarted}>{dir}</button>
-        ))}
+      <div className={styles.airportSelector}>
+        <div className={styles.primaryAirports}>
+          {PRIMARY_AIRPORTS.map(dir => (
+            <button key={dir} className={`${styles.directionButton} ${styles[dir.toLowerCase()]} ${direction === dir ? styles.active : ''}`} onClick={() => setDirection(dir)} disabled={tripStarted}>{dir}</button>
+          ))}
+        </div>
+        <div className={styles.secondaryAirports}>
+          {SECONDARY_AIRPORTS.map(dir => (
+            <button key={dir} className={`${styles.directionButton} ${styles.secondary} ${direction === dir ? styles.active : ''}`} onClick={() => setDirection(dir)} disabled={tripStarted}>{dir}</button>
+          ))}
+        </div>
       </div>
 
       <div className={styles.dateSelector}>

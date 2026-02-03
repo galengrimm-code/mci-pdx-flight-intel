@@ -86,8 +86,12 @@
 
 .modeButton:disabled { opacity: 0.5; }
 
-/* Direction selector */
-.directionSelector { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); }
+/* Airport selector */
+.airportSelector { margin-bottom: var(--space-xl); }
+
+.primaryAirports { display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); }
+
+.secondaryAirports { display: flex; gap: var(--space-sm); justify-content: center; }
 
 .directionButton {
   flex: 1;
@@ -99,6 +103,20 @@
   color: var(--text-muted);
   box-shadow: var(--shadow-sm);
   transition: all 0.2s;
+}
+
+.directionButton.secondary {
+  flex: 0;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.8125rem;
+  background: var(--bg-elevated);
+  box-shadow: none;
+}
+
+.directionButton.secondary.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .directionButton.mci.active {
