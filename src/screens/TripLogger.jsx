@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStopwatch } from '../hooks/useStopwatch'
 import sheetsService from '../services/sheets'
@@ -21,6 +22,7 @@ const formatDate = (dateStr) => {
 }
 
 export default function TripLogger() {
+  const navigate = useNavigate()
   const [view, setView] = useState('log') // 'log' or 'history'
   const [mode, setMode] = useState('stopwatch')
   const [direction, setDirection] = useState(DIRECTIONS[0])
@@ -28,7 +30,6 @@ export default function TripLogger() {
   const [completedSegments, setCompletedSegments] = useState([])
   const [tripStarted, setTripStarted] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
   const stopwatch = useStopwatch()
   const [manualTimes, setManualTimes] = useState(SEGMENTS.reduce((acc, seg) => ({ ...acc, [seg.id]: { hours: '', minutes: '' } }), {}))
   const [departureTime, setDepartureTime] = useState('')
@@ -90,7 +91,7 @@ export default function TripLogger() {
       for (const segment of segments) {
         await sheetsService.addTimeSegment({ trip_id: tripId, segment_type: segment.id, start_time: segment.startTime || '', end_time: segment.endTime || '', duration_minutes: segment.durationMinutes.toFixed(1), notes: '' })
       }
-      setSaved(true)
+      navigate('/')
     } catch (error) {
       console.error('Failed to save trip:', error)
       setSheetError('Failed to save trip. Please check your connection.')
@@ -103,7 +104,6 @@ export default function TripLogger() {
     setTripStarted(false)
     setCurrentSegmentIndex(0)
     setCompletedSegments([])
-    setSaved(false)
     setSheetError(null)
     setDepartureTime('')
     setTripDate(new Date().toISOString().split('T')[0])
@@ -186,19 +186,6 @@ export default function TripLogger() {
       console.error('Failed to delete trip:', error)
       setSheetError('Failed to delete trip')
     }
-  }
-
-  if (saved) {
-    return (
-      <div className={styles.container}>
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={styles.successCard}>
-          <span className={styles.successIcon}>✓</span>
-          <h2>Trip Saved!</h2>
-          <p>Your trip data has been recorded.</p>
-          <button onClick={handleReset} className={styles.primaryButton}>Log Another Trip</button>
-        </motion.div>
-      </div>
-    )
   }
 
   return (
