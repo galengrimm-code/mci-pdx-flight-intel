@@ -25,6 +25,25 @@ const formatDate = (dateStr) => {
   return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`
 }
 
+const formatTime = (timeStr) => {
+  if (!timeStr) return ''
+  // Handle ISO format from Sheets (1899-12-30T20:30:00.000Z) or plain time (20:30)
+  let hours, minutes
+  if (timeStr.includes('T')) {
+    const date = new Date(timeStr)
+    if (isNaN(date)) return ''
+    hours = date.getUTCHours()
+    minutes = date.getUTCMinutes()
+  } else if (timeStr.includes(':')) {
+    [hours, minutes] = timeStr.split(':').map(Number)
+  } else {
+    return ''
+  }
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  const hour12 = hours % 12 || 12
+  return `${hour12}:${minutes.toString().padStart(2, '0')} ${ampm}`
+}
+
 export default function TripLogger() {
   const navigate = useNavigate()
   const [view, setView] = useState('log') // 'log' or 'history'
@@ -246,7 +265,7 @@ export default function TripLogger() {
                         <span className={`${styles.tripDirection} ${styles[trip.direction?.toLowerCase()]}`}>{trip.direction}</span>
                       </div>
                       <div className={styles.tripDetails}>
-                        <span>✈️ {trip.flight_time || '—'}</span>
+                        <span>✈️ {formatTime(trip.flight_time) || '—'}</span>
                         <span>⏱ {trip.total_time} min</span>
                         <span>{trip.day_of_week}</span>
                       </div>
