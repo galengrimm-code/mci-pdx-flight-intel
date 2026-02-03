@@ -20,7 +20,7 @@ const formatDate = (dateStr) => {
   if (!dateStr) return ''
   const date = new Date(dateStr + 'T12:00:00')
   if (isNaN(date)) return dateStr
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`
 }
 
 export default function TripLogger() {
