@@ -54,6 +54,7 @@ export default function TripLogger() {
   const handleNextSegment = () => {
     if (mode === 'stopwatch') {
       const timing = stopwatch.stop()
+      if (!timing) return
       setCompletedSegments(prev => [...prev, { ...currentSegment, ...timing }])
       if (!isLastSegment) {
         setCurrentSegmentIndex(prev => prev + 1)

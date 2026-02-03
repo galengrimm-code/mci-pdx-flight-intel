@@ -5,19 +5,22 @@ export function useStopwatch() {
   const [elapsedTime, setElapsedTime] = useState(0)
   const [startTimestamp, setStartTimestamp] = useState(null)
   const intervalRef = useRef(null)
+  const isRunningRef = useRef(false)
 
   const start = useCallback(() => {
-    if (isRunning) return
+    if (isRunningRef.current) return
+    isRunningRef.current = true
     const now = Date.now()
     setStartTimestamp(now)
     setIsRunning(true)
     intervalRef.current = setInterval(() => {
       setElapsedTime(Date.now() - now)
     }, 100)
-  }, [isRunning])
+  }, [])
 
   const stop = useCallback(() => {
-    if (!isRunning) return
+    if (!isRunningRef.current) return null
+    isRunningRef.current = false
     clearInterval(intervalRef.current)
     setIsRunning(false)
     return {
@@ -26,10 +29,11 @@ export function useStopwatch() {
       durationMs: elapsedTime,
       durationMinutes: Math.round(elapsedTime / 60000 * 10) / 10
     }
-  }, [isRunning, startTimestamp, elapsedTime])
+  }, [startTimestamp, elapsedTime])
 
   const reset = useCallback(() => {
     clearInterval(intervalRef.current)
+    isRunningRef.current = false
     setIsRunning(false)
     setElapsedTime(0)
     setStartTimestamp(null)
