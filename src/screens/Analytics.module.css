@@ -137,3 +137,62 @@
 }
 
 .empty { text-align: center; padding: var(--space-xl); color: var(--text-muted); font-size: 0.875rem; }
+
+/* Export section */
+.exportSection {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-md);
+}
+
+.exportButton {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.exportButton:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.exportMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--space-sm);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 10;
+  min-width: 160px;
+}
+
+.exportMenu button {
+  display: block;
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  transition: background 0.15s;
+}
+
+.exportMenu button:hover {
+  background: var(--bg-elevated);
+}
+
+.exportMenu button:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
