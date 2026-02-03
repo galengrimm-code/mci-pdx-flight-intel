@@ -6,11 +6,13 @@ export function useStopwatch() {
   const [startTimestamp, setStartTimestamp] = useState(null)
   const intervalRef = useRef(null)
   const isRunningRef = useRef(false)
+  const startTimestampRef = useRef(null)
 
   const start = useCallback(() => {
     if (isRunningRef.current) return
     isRunningRef.current = true
     const now = Date.now()
+    startTimestampRef.current = now
     setStartTimestamp(now)
     setIsRunning(true)
     intervalRef.current = setInterval(() => {
@@ -18,22 +20,36 @@ export function useStopwatch() {
     }, 100)
   }, [])
 
+  // Update elapsed time immediately when app returns from background
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isRunningRef.current && startTimestampRef.current) {
+        setElapsedTime(Date.now() - startTimestampRef.current)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
   const stop = useCallback(() => {
     if (!isRunningRef.current) return null
     isRunningRef.current = false
     clearInterval(intervalRef.current)
     setIsRunning(false)
+    // Calculate fresh elapsed time in case app was backgrounded
+    const finalElapsed = startTimestampRef.current ? Date.now() - startTimestampRef.current : elapsedTime
     return {
-      startTime: startTimestamp ? new Date(startTimestamp).toISOString() : null,
+      startTime: startTimestampRef.current ? new Date(startTimestampRef.current).toISOString() : null,
       endTime: new Date().toISOString(),
-      durationMs: elapsedTime,
-      durationMinutes: Math.round(elapsedTime / 60000 * 10) / 10
+      durationMs: finalElapsed,
+      durationMinutes: Math.round(finalElapsed / 60000 * 10) / 10
     }
-  }, [startTimestamp, elapsedTime])
+  }, [elapsedTime])
 
   const reset = useCallback(() => {
     clearInterval(intervalRef.current)
     isRunningRef.current = false
+    startTimestampRef.current = null
     setIsRunning(false)
     setElapsedTime(0)
     setStartTimestamp(null)
