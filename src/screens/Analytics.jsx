@@ -5,8 +5,8 @@ import sheetsService from '../services/sheets'
 import styles from './Analytics.module.css'
 
 const SEGMENT_LABELS = {
-  'house_to_airport': 'House to Airport',
-  'terminal_to_parking': 'Terminal to Parking',
+  'house_to_airport': 'House to Terminal',
+  'terminal_to_parking': 'Terminal to Parking/Rental',
   'parking_to_security': 'Parking/Rental to Curb',
   'security_to_gate': 'Curb to Gate',
 }
