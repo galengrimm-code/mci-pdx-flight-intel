@@ -191,6 +191,16 @@
 .segmentLabel { flex: 1; font-size: 0.875rem; color: var(--text-secondary); }
 .segmentTime { font-family: var(--font-mono); font-size: 0.875rem; color: var(--accent-sky); font-weight: 500; }
 
+.completedSegment.skippedSegment {
+  opacity: 0.5;
+  background: var(--bg-elevated);
+}
+
+.completedSegment.skippedSegment .segmentTime {
+  color: var(--text-muted);
+  font-family: inherit;
+}
+
 /* Current segment */
 .currentSegment {
   flex: 1;
@@ -212,12 +222,52 @@
 .time { font-family: var(--font-mono); font-size: 3.5rem; font-weight: 600; }
 .time.running { color: var(--accent-sky); }
 
+.segmentActions {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.skipButton {
+  padding: var(--space-md) var(--space-xl);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  border: 1px solid var(--border);
+}
+
 .nextButton {
   padding: var(--space-md) var(--space-2xl);
   background: var(--accent-sky);
   color: #ffffff;
   border-radius: var(--radius-full);
   font-weight: 600;
+}
+
+/* Next segment preview */
+.nextSegmentPreview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.nextLabel {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.nextSegmentIcon {
+  font-size: 1rem;
+}
+
+.nextSegmentName {
+  color: var(--text-secondary);
 }
 
 /* Trip complete */
@@ -231,6 +281,72 @@
 }
 
 .tripComplete h2 { margin-bottom: var(--space-lg); color: var(--accent-sky); }
+
+/* Editable segments after trip complete */
+.editableSegments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 100%;
+  margin-bottom: var(--space-lg);
+}
+
+.editableSegment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.editableSegment.skippedSegment {
+  opacity: 0.6;
+  background: var(--bg-elevated);
+}
+
+.editableSegmentInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.editableSegmentIcon {
+  font-size: 1.25rem;
+}
+
+.editableSegmentLabel {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.editableSegmentTime {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.segmentTimeInput {
+  width: 60px;
+  padding: var(--space-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+.segmentTimeInput:focus {
+  border-color: var(--accent-sky);
+  outline: none;
+}
+
+.segmentTimeUnit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
 
 .totalTime { display: flex; flex-direction: column; gap: var(--space-xs); margin-bottom: var(--space-xl); }
 .totalLabel { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }

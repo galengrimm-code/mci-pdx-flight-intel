@@ -90,6 +90,38 @@ export default function TripLogger() {
     }
   }
 
+  const handleSkipSegment = () => {
+    if (mode === 'stopwatch') {
+      stopwatch.stop()
+      // Add skipped segment with 0 duration
+      setCompletedSegments(prev => [...prev, {
+        ...currentSegment,
+        durationMinutes: 0,
+        durationMs: 0,
+        skipped: true,
+        startTime: new Date().toISOString(),
+        endTime: new Date().toISOString()
+      }])
+      if (!isLastSegment) {
+        setCurrentSegmentIndex(prev => prev + 1)
+        stopwatch.reset()
+        setTimeout(() => stopwatch.start(), 100)
+      } else {
+        setCurrentSegmentIndex(prev => prev + 1)
+      }
+    }
+  }
+
+  const handleEditSegmentTime = (segmentIndex, newMinutes) => {
+    setCompletedSegments(prev => prev.map((seg, i) =>
+      i === segmentIndex
+        ? { ...seg, durationMinutes: parseFloat(newMinutes) || 0, skipped: false }
+        : seg
+    ))
+  }
+
+  const nextSegment = SEGMENTS[currentSegmentIndex + 1]
+
   const getManualMinutes = (segId) => {
     const time = manualTimes[segId]
     return (parseFloat(time.hours) || 0) * 60 + (parseFloat(time.minutes) || 0)
@@ -315,10 +347,10 @@ export default function TripLogger() {
               <div className={styles.segmentsList}>
                 <AnimatePresence>
                   {completedSegments.map((seg, i) => (
-                    <motion.div key={seg.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className={styles.completedSegment}>
+                    <motion.div key={seg.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className={`${styles.completedSegment} ${seg.skipped ? styles.skippedSegment : ''}`}>
                       <span className={styles.segmentIcon}>{SEGMENTS[i].icon}</span>
                       <span className={styles.segmentLabel}>{SEGMENTS[i].label}</span>
-                      <span className={styles.segmentTime}>{seg.durationMinutes.toFixed(1)}m</span>
+                      <span className={styles.segmentTime}>{seg.skipped ? 'Skipped' : `${seg.durationMinutes.toFixed(1)}m`}</span>
                     </motion.div>
                   ))}
                 </AnimatePresence>
@@ -333,13 +365,44 @@ export default function TripLogger() {
                   <div className={styles.stopwatchDisplay}>
                     <span className={`${styles.time} ${stopwatch.isRunning ? styles.running : ''}`}>{stopwatch.formatTime()}</span>
                   </div>
-                  <button onClick={handleNextSegment} className={styles.nextButton}>{isLastSegment ? 'Complete Trip' : 'Next Segment'}</button>
+                  <div className={styles.segmentActions}>
+                    <button onClick={handleSkipSegment} className={styles.skipButton}>Skip</button>
+                    <button onClick={handleNextSegment} className={styles.nextButton}>{isLastSegment ? 'Complete Trip' : 'Next Segment'}</button>
+                  </div>
+                  {nextSegment && (
+                    <div className={styles.nextSegmentPreview}>
+                      <span className={styles.nextLabel}>Next:</span>
+                      <span className={styles.nextSegmentIcon}>{nextSegment.icon}</span>
+                      <span className={styles.nextSegmentName}>{nextSegment.label}</span>
+                    </div>
+                  )}
                 </motion.div>
               )}
 
               {allSegmentsComplete && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={styles.tripComplete}>
                   <h2>Trip Complete!</h2>
+                  <div className={styles.editableSegments}>
+                    {completedSegments.map((seg, i) => (
+                      <div key={seg.id} className={`${styles.editableSegment} ${seg.skipped ? styles.skippedSegment : ''}`}>
+                        <div className={styles.editableSegmentInfo}>
+                          <span className={styles.editableSegmentIcon}>{SEGMENTS[i].icon}</span>
+                          <span className={styles.editableSegmentLabel}>{SEGMENTS[i].label}</span>
+                        </div>
+                        <div className={styles.editableSegmentTime}>
+                          <input
+                            type="number"
+                            inputMode="decimal"
+                            step="0.1"
+                            value={seg.durationMinutes}
+                            onChange={(e) => handleEditSegmentTime(i, e.target.value)}
+                            className={styles.segmentTimeInput}
+                          />
+                          <span className={styles.segmentTimeUnit}>min</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                   <div className={styles.totalTime}>
                     <span className={styles.totalLabel}>Total Time</span>
                     <span className={styles.totalValue}>{completedSegments.reduce((sum, seg) => sum + seg.durationMinutes, 0).toFixed(1)} min</span>
